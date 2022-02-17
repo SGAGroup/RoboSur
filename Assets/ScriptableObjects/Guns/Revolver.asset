@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba548f07b8e2b5441871138b9b39c9ac, type: 3}
+  m_Name: Revolver
+  m_EditorClassIdentifier: 
+  name: Revolver
+  prefab: {fileID: 7390295895853488510, guid: c3314492a8f42aa4aa7795e3625a6d69, type: 3}
+  firerate: 228
