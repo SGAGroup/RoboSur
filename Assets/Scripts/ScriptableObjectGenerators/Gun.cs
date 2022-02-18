@@ -11,6 +11,7 @@ namespace Com.sgagdr.BlackSky
 
     #region Private Methods
     
+    //Сюда можно добавить что душе угодно
     public class Gun : ScriptableObject
     {
         //Имя пукши
@@ -19,7 +20,8 @@ namespace Com.sgagdr.BlackSky
         public GameObject prefab;
         //Темп огня
         public float firerate;
-        //Сюда можно добавить что душе угодно
+        //Скорость прицеливания
+        public float aimSpeed;
     }
 
     #endregion
