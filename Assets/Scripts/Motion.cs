@@ -21,6 +21,13 @@ namespace Com.sgagdr.BlackSky
         private float baseFOV;
         private float sprintFOVModifier = 1.4f;
 
+
+        //Покачивание головы
+        public Transform weaponParent; //Положение слота для оружия, используется для покачивания камеры
+        private float idleCount = 0f; //Счетчик покачивания камеры для состояния стоя
+        private float movementCount = 0f; //Счетчик покачивания камеры для движения
+        private Vector3 weaponParentOrigin; //Изначальное положение слота для оружия
+        private Vector3 targetHeadBobPos; //Положение, которое он должен занять
         #endregion
 
         #region  Monobehavior Callbacks
@@ -31,6 +38,7 @@ namespace Com.sgagdr.BlackSky
             //Включить если в сцене больше чем одна камера
             //Camera.main.enabled = false;
             rig = GetComponent<Rigidbody>();
+            weaponParentOrigin = weaponParent.localPosition;
         }
 
         private void Update()
@@ -56,6 +64,27 @@ namespace Com.sgagdr.BlackSky
                 rig.AddForce(Vector3.up * jumpForce);
             }
 
+
+            //Покачивание головы
+            if(t_hmove == 0 && t_vmove == 0)
+            {
+                HeadBob(idleCount, 0.025f, 0.025f);
+                idleCount += Time.deltaTime;
+                weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetHeadBobPos, Time.deltaTime * 2f);
+            }
+            else if (!isSprinting)
+            {
+                HeadBob(movementCount, 0.035f, 0.035f);
+                movementCount += Time.deltaTime*3f;
+                weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetHeadBobPos, Time.deltaTime * 6f);
+            }
+            else
+            {
+                HeadBob(movementCount, 0.15f, 0.07f);
+                movementCount += Time.deltaTime*7f;
+                weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetHeadBobPos, Time.deltaTime * 10f);
+            }
+            
         }
 
         void FixedUpdate()
@@ -93,5 +122,14 @@ namespace Com.sgagdr.BlackSky
 
         #endregion
 
+        #region Private Methods
+
+        //Покачивание головы
+        void HeadBob(float p_z, float p_xIntensity, float p_yIntensity)
+        {
+            targetHeadBobPos = weaponParentOrigin + new Vector3(Mathf.Cos(p_z) * p_xIntensity, Mathf.Sin(p_z*2) * p_yIntensity, 0);
+        }
+
+        #endregion
     }
 }
