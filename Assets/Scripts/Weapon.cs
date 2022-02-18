@@ -17,6 +17,8 @@ namespace Com.sgagdr.BlackSky
         public GameObject bulletholePrefab;
         public LayerMask canBeShot;
 
+        public float bulletholeDuration = 5f;
+
         private int currentIndex;
         private GameObject currentWeapon;
 
@@ -91,9 +93,9 @@ namespace Com.sgagdr.BlackSky
             //Пальнули невидимый лучом из камеры (t_spawn.position) в направлении синей стрелки (t_spawn.forward) записали положение попадания в t_hit
             if(Physics.Raycast(t_spawn.position, t_spawn.forward, out t_hit, 1000f, canBeShot))
             {
-                GameObject t_newHole = Instantiate(bulletholePrefab, t_hit.point + t_hit.normal * 0.001f, Quaternion.identity) as GameObject;
+                GameObject t_newHole = Instantiate(bulletholePrefab, t_hit.point + t_hit.normal * 0.002f, Quaternion.identity) as GameObject;
                 t_newHole.transform.LookAt(t_hit.point + t_hit.normal);
-                Destroy(t_newHole, 5f);
+                Destroy(t_newHole, bulletholeDuration);
             }
         }
 

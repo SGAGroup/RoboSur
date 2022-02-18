@@ -1141,6 +1141,7 @@ MonoBehaviour:
   canBeShot:
     serializedVersion: 2
     m_Bits: 247
+  bulletholeDuration: 5
 --- !u!114 &1628981409
 MonoBehaviour:
   m_ObjectHideFlags: 0
