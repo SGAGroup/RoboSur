@@ -287,7 +287,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 461118387}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Misc
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -449,7 +449,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 806458078}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -596,7 +596,7 @@ GameObject:
   - component: {fileID: 1103891675}
   - component: {fileID: 1103891674}
   - component: {fileID: 1103891673}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Glasses
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -845,7 +845,7 @@ GameObject:
   - component: {fileID: 1377696628}
   - component: {fileID: 1377696627}
   - component: {fileID: 1377696630}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Normal Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -998,7 +998,7 @@ GameObject:
   - component: {fileID: 1628981406}
   - component: {fileID: 1628981408}
   - component: {fileID: 1628981409}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1137,6 +1137,10 @@ MonoBehaviour:
   loadout:
   - {fileID: 11400000, guid: 19532497356e82e41b3472e7d1d0ed0f, type: 2}
   weaponParent: {fileID: 806458078}
+  bulletholePrefab: {fileID: 296612812493044449, guid: f1e1553a3d62e524083a96ff0d26dd68, type: 3}
+  canBeShot:
+    serializedVersion: 2
+    m_Bits: 247
 --- !u!114 &1628981409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1336,7 +1340,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1885587061}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cameras
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1367,7 +1371,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1899469078}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ground Detect
   m_TagString: Untagged
   m_Icon: {fileID: 0}

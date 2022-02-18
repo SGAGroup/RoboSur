@@ -14,6 +14,8 @@ namespace Com.sgagdr.BlackSky
         //Как массив, но не массив, ебать!
         public Transform weaponParent;
         //Получаем позицию родительского объекта в иерархии
+        public GameObject bulletholePrefab;
+        public LayerMask canBeShot;
 
         private int currentIndex;
         private GameObject currentWeapon;
@@ -30,6 +32,11 @@ namespace Com.sgagdr.BlackSky
             {
             //Если нажата ЛКМ, то внутри функции Aim переменная p_isAiming будет равна истине
             Aim(Input.GetMouseButton(1));
+
+            if(Input.GetMouseButtonDown(0))
+            {
+                Shoot();
+            }
             }  
         }
 
@@ -72,6 +79,21 @@ namespace Com.sgagdr.BlackSky
             {
                 //Если нет, то от бедра
                 t_anchor.position = Vector3.Lerp(t_anchor.position, t_state_hip.position, Time.deltaTime * loadout[currentIndex].aimSpeed);
+            }
+        }
+
+        void Shoot ()
+        {
+            //Получаем положение нашей камеры
+            Transform t_spawn = transform.Find("Cameras/Normal Camera");
+
+            RaycastHit t_hit = new RaycastHit();
+            //Пальнули невидимый лучом из камеры (t_spawn.position) в направлении синей стрелки (t_spawn.forward) записали положение попадания в t_hit
+            if(Physics.Raycast(t_spawn.position, t_spawn.forward, out t_hit, 1000f, canBeShot))
+            {
+                GameObject t_newHole = Instantiate(bulletholePrefab, t_hit.point + t_hit.normal * 0.001f, Quaternion.identity) as GameObject;
+                t_newHole.transform.LookAt(t_hit.point + t_hit.normal);
+                Destroy(t_newHole, 5f);
             }
         }
 
