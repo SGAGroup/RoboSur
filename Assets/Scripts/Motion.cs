@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 namespace Com.sgagdr.BlackSky
 {
-    public class Motion : MonoBehaviour
+    public class Motion : MonoBehaviourPun
     {
         
         #region  Variables
@@ -43,6 +44,7 @@ namespace Com.sgagdr.BlackSky
 
         private void Update()
         {
+            if (!photonView.IsMine) return;
             //"Очень крутая теория почему мы проверяем кнопки здесь, а не в FixedUpdate"
 
             //Впитываем оси
@@ -89,7 +91,7 @@ namespace Com.sgagdr.BlackSky
 
         void FixedUpdate()
         {
-            
+            if (!photonView.IsMine) return;
             //Впитываем оси
             float t_hmove = Input.GetAxisRaw("Horizontal");
             float t_vmove = Input.GetAxisRaw("Vertical");
