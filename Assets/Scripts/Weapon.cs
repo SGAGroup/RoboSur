@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 namespace Com.sgagdr.BlackSky
 {
-    public class Weapon : MonoBehaviour
+    public class Weapon : MonoBehaviourPun
     {
 
         #region Variables
@@ -28,7 +29,8 @@ namespace Com.sgagdr.BlackSky
 
         void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Alpha1)) Equip(0);
+            if (!photonView.IsMine) return;
+            if (Input.GetKeyDown(KeyCode.Alpha1)) Equip(0);
 
             if(currentWeapon !=null)
             {
@@ -59,6 +61,7 @@ namespace Com.sgagdr.BlackSky
             //Убеждаемся что новый объёкт находится в локальных нулях
             t_newWeapon.transform.localEulerAngles = Vector3.zero;
             //Тоже самое с поворотом
+            t_newWeapon.GetComponent<Sway>().enabled = photonView.IsMine;
 
             currentWeapon = t_newWeapon;
         }

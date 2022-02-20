@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 
 //Этот скрипт надо кидать на каждый новый префаб пушки (не модель, а именно префаб)
 namespace Com.sgagdr.BlackSky
 {
-    public class Sway : MonoBehaviour
+    public class Sway : MonoBehaviourPun
     {
 
         #region Variables
@@ -28,6 +29,7 @@ namespace Com.sgagdr.BlackSky
 
         private void Update()
         {
+            if (!photonView.IsMine) return;
             UpdateSway();
         }
 

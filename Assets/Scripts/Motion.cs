@@ -14,6 +14,7 @@ namespace Com.sgagdr.BlackSky
         public float sprintModifier;
         public float jumpForce;
         public Camera normalCam;
+        public GameObject cameraParent;
         public Transform groundDetector;
         public LayerMask ground;
 
@@ -35,9 +36,10 @@ namespace Com.sgagdr.BlackSky
 
         private void Start()
         {
+            if (photonView.IsMine) cameraParent.SetActive(true);
             baseFOV = normalCam.fieldOfView;
             //Включить если в сцене больше чем одна камера
-            //Camera.main.enabled = false;
+            //if(Camera.main) Camera.main.enabled = false;
             rig = GetComponent<Rigidbody>();
             weaponParentOrigin = weaponParent.localPosition;
         }

@@ -256,6 +256,7 @@ GameObject:
   - component: {fileID: 5813621671052394080}
   - component: {fileID: 5813621671052394081}
   - component: {fileID: -4361505635880551737}
+  - component: {fileID: 6665361733343445134}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -375,6 +376,7 @@ MonoBehaviour:
   sprintModifier: 2
   jumpForce: 100
   normalCam: {fileID: 5813621670800428468}
+  cameraParent: {fileID: 5813621671309652147}
   groundDetector: {fileID: 5813621671323037654}
   ground:
     serializedVersion: 2
@@ -436,10 +438,27 @@ MonoBehaviour:
   Synchronization: 2
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 6665361733343445134}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &6665361733343445134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5813621671052394073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &5813621671309652147
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,7 +474,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5813621671309652149
 Transform:
   m_ObjectHideFlags: 0

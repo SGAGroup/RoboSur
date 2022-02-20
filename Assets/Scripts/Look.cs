@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+
 
 namespace Com.sgagdr.BlackSky
 {
-    public class Look : MonoBehaviour
+    public class Look : MonoBehaviourPun
     {
         #region Variables
         public static bool cursorLocked = true;
@@ -30,6 +32,7 @@ namespace Com.sgagdr.BlackSky
 
         void Update()
         {
+            if (!photonView.IsMine) return;
             SetY();
             SetX();
 
