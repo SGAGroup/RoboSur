@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunName: 
   prefab: {fileID: 7390295895853488510, guid: c3314492a8f42aa4aa7795e3625a6d69, type: 3}
-  firerate: 228
+  bloom: 20
+  recoil: 20
+  kickback: 0.15
+  firerate: 0.9
   aimSpeed: 9

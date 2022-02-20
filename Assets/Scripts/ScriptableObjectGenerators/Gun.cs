@@ -18,6 +18,12 @@ namespace Com.sgagdr.BlackSky
         public string gunName;
         //Модель пукши
         public GameObject prefab;
+        //Разброс (хз почему блум блять)
+        public float bloom;
+        //Отдача по вертикали
+        public float recoil;
+        //Отбрасывание пушки назад при выстреле
+        public float kickback;
         //Темп огня
         public float firerate;
         //Скорость прицеливания

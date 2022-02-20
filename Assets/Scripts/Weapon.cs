@@ -20,6 +20,7 @@ namespace Com.sgagdr.BlackSky
 
         public float bulletholeDuration = 5f;
 
+        private float currentCooldown;
         private int currentIndex;
         private GameObject currentWeapon;
 
@@ -30,17 +31,24 @@ namespace Com.sgagdr.BlackSky
         void Update()
         {
             if (!photonView.IsMine) return;
+
             if (Input.GetKeyDown(KeyCode.Alpha1)) Equip(0);
 
             if(currentWeapon !=null)
             {
-            //Если нажата ЛКМ, то внутри функции Aim переменная p_isAiming будет равна истине
-            Aim(Input.GetMouseButton(1));
+                //Если нажата ЛКМ, то внутри функции Aim переменная p_isAiming будет равна истине
+                Aim(Input.GetMouseButton(1));
 
-            if(Input.GetMouseButtonDown(0))
-            {
-                Shoot();
-            }
+                if(Input.GetMouseButtonDown(0) && currentCooldown <= 0)
+                {
+                    Shoot();
+                }
+
+                //weapon position elasticity (Ну чтобы тут хранилась позиция пукши, к которой мы можем вернуться, после отдачи например)
+                currentWeapon.transform.localPosition = Vector3.Lerp(currentWeapon.transform.localPosition, Vector3.zero, Time.deltaTime * 4f);
+
+                //cooldown
+                if(currentCooldown > 0) currentCooldown -= Time.deltaTime;
             }  
         }
 
@@ -92,14 +100,34 @@ namespace Com.sgagdr.BlackSky
             //Получаем положение нашей камеры
             Transform t_spawn = transform.Find("Cameras/Normal Camera");
 
+            //Разброс (хз почему этот уёбок говорит, что bloom - это разброс)            
+            //Создали точку, которая находится на расстоянии 1000 юнитивских единиц от игрока
+            Vector3 t_bloom = t_spawn.position + t_spawn.forward * 1000f;
+            //А вот тут чет сложное, не совсем понял, че к чему
+            t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.up;
+            t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.right;
+            t_bloom -= t_spawn.position;
+            t_bloom.Normalize();
+
+            //raycast
             RaycastHit t_hit = new RaycastHit();
             //Пальнули невидимый лучом из камеры (t_spawn.position) в направлении синей стрелки (t_spawn.forward) записали положение попадания в t_hit
-            if(Physics.Raycast(t_spawn.position, t_spawn.forward, out t_hit, 1000f, canBeShot))
+            if(Physics.Raycast(t_spawn.position, t_bloom, out t_hit, 1000f, canBeShot))
             {
                 GameObject t_newHole = Instantiate(bulletholePrefab, t_hit.point + t_hit.normal * 0.002f, Quaternion.identity) as GameObject;
                 t_newHole.transform.LookAt(t_hit.point + t_hit.normal);
                 Destroy(t_newHole, bulletholeDuration);
             }
+
+            //gun fx
+
+            //Отдача по вертикали
+            currentWeapon.transform.Rotate(-loadout[currentIndex].recoil, 0, 0);
+            //Отбрасыванию пушки назад при выстреле (Ну, отдача по горизонтали, получается)
+            currentWeapon.transform.position -= currentWeapon.transform.forward * loadout[currentIndex].kickback;
+
+            //cooldown
+            currentCooldown = loadout[currentIndex].firerate;
         }
 
         #endregion
