@@ -11,7 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Levels/Menu/Menu.unity
     guid: 50d1545c61ec88c4bb6b8922be18eb0c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Levels/Desert Level/Desert.unity
     guid: e12c0258fae48b145b452af50d9d586f
+  - enabled: 1
+    path: Assets/Levels/Arena/Arena.unity
+    guid: 1a9819eb7688dec4db9dd115b3dc11ee
   m_configObjects: {}
