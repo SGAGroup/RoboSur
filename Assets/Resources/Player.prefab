@@ -477,6 +477,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   weaponParent: {fileID: 7862840661612877196}
+  maxHealth: 100
 --- !u!114 &7862840662434451442
 MonoBehaviour:
   m_ObjectHideFlags: 0

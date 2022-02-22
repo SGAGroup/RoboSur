@@ -14,6 +14,7 @@ namespace Com.sgagdr.BlackSky
 
         public float intensity;
         public float smooth;
+        public bool IsMine;
 
         private Quaternion origin_rotation;
 
@@ -43,6 +44,13 @@ namespace Com.sgagdr.BlackSky
             //Cчитываем движение мыши
             float t_x_mouse = Input.GetAxis("Mouse X");
             float t_y_mouse = Input.GetAxis("Mouse Y");
+
+            if (!photonView.IsMine)
+            {
+                t_x_mouse = 0;
+                t_y_mouse = 0;
+            }
+
 
             //Cчитаем поворот кватернионами с умным видом, что всё понимаем
             Quaternion t_x_adj = Quaternion.AngleAxis(-intensity * t_x_mouse, Vector3.up);

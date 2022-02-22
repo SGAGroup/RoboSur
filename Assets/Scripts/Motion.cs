@@ -7,7 +7,7 @@ namespace Com.sgagdr.BlackSky
 {
     public class Motion : MonoBehaviourPun
     {
-        
+
         #region  Variables
 
         public float speed;
@@ -30,14 +30,20 @@ namespace Com.sgagdr.BlackSky
         private float movementCount = 0f; //Счетчик покачивания камеры для движения
         private Vector3 weaponParentOrigin; //Изначальное положение слота для оружия
         private Vector3 targetHeadBobPos; //Положение, которое он должен занять
+
+        //Здоровье
+        public int maxHealth;
+        private int currentHealth;
+
         #endregion
 
         #region  Monobehavior Callbacks
 
         private void Start()
         {
+            currentHealth = maxHealth;
             if (photonView.IsMine) cameraParent.SetActive(true);
-            if (!photonView.IsMine) gameObject.layer = 11;//11 - Player, что позволяет оружию наносить им урон
+            if (!photonView.IsMine) gameObject.layer = 10;//10 - Player, что позволяет оружию наносить им урон
             baseFOV = normalCam.fieldOfView;
             //Включить если в сцене больше чем одна камера
             //if(Camera.main) Camera.main.enabled = false;
@@ -64,14 +70,14 @@ namespace Com.sgagdr.BlackSky
             bool isSprinting = sprint && t_vmove > 0 && !isJumping && isGrounded;
 
             //Прыгаем
-            if(isJumping)
+            if (isJumping)
             {
                 rig.AddForce(Vector3.up * jumpForce);
             }
 
 
             //Покачивание головы
-            if(t_hmove == 0 && t_vmove == 0)
+            if (t_hmove == 0 && t_vmove == 0)
             {
                 HeadBob(idleCount, 0.025f, 0.025f);
                 idleCount += Time.deltaTime;
@@ -80,16 +86,16 @@ namespace Com.sgagdr.BlackSky
             else if (!isSprinting)
             {
                 HeadBob(movementCount, 0.035f, 0.035f);
-                movementCount += Time.deltaTime*3f;
+                movementCount += Time.deltaTime * 3f;
                 weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetHeadBobPos, Time.deltaTime * 6f);
             }
             else
             {
                 HeadBob(movementCount, 0.15f, 0.07f);
-                movementCount += Time.deltaTime*7f;
+                movementCount += Time.deltaTime * 7f;
                 weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetHeadBobPos, Time.deltaTime * 10f);
             }
-            
+
         }
 
         void FixedUpdate()
@@ -113,7 +119,7 @@ namespace Com.sgagdr.BlackSky
             t_direction.Normalize();
 
             float t_adjustedSpeed = speed;
-            if(isSprinting) t_adjustedSpeed *= sprintModifier;
+            if (isSprinting) t_adjustedSpeed *= sprintModifier;
 
             Vector3 t_targetVelocity = transform.TransformDirection(t_direction) * t_adjustedSpeed * Time.deltaTime;
             t_targetVelocity.y = rig.velocity.y;
@@ -121,7 +127,7 @@ namespace Com.sgagdr.BlackSky
 
 
             //FOV при беге и ходьбе
-            if(isSprinting) { normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV * sprintFOVModifier, Time.deltaTime * 8f); }
+            if (isSprinting) { normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV * sprintFOVModifier, Time.deltaTime * 8f); }
             else { normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV, Time.deltaTime * 8f); }
         }
 
@@ -132,9 +138,37 @@ namespace Com.sgagdr.BlackSky
         //Покачивание головы
         void HeadBob(float p_z, float p_xIntensity, float p_yIntensity)
         {
-            targetHeadBobPos = weaponParentOrigin + new Vector3(Mathf.Cos(p_z) * p_xIntensity, Mathf.Sin(p_z*2) * p_yIntensity, 0);
+            targetHeadBobPos = weaponParentOrigin + new Vector3(Mathf.Cos(p_z) * p_xIntensity, Mathf.Sin(p_z * 2) * p_yIntensity, 0);
         }
 
+
+        private void Die()
+        {
+            Debug.Log("You died!");
+        }
+
+
         #endregion
+
+        #region Public Methods
+
+        public void TakeDamage(int p_damage)
+        {
+            if (photonView.IsMine)
+            {
+                currentHealth -= p_damage;
+                Debug.Log("Get " + p_damage + " damage. Current health: " + currentHealth);
+
+                if(currentHealth <= 0)
+                {
+                    Die();
+                }
+
+            }
+        }
+
+
+        #endregion
+
     }
 }

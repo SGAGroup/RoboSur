@@ -139,9 +139,12 @@ namespace Com.sgagdr.BlackSky
                 if (photonView.IsMine)
                 {
                     //Что-то с тем, что мы попали в игрока
-                    if(t_hit.collider.gameObject.layer == 11)
+                    if(t_hit.collider.gameObject.layer == 10)
                     {
                         //А тут должен быть эффект от урона
+                        //И теперь тут есть урон
+                        //Наносим урон равный урону текущего оружия, сообщаем всем
+                        t_hit.collider.gameObject.GetPhotonView().RPC("TakeDamage", RpcTarget.All, loadout[currentIndex].damage);
                     }
                 }
             }
@@ -152,6 +155,12 @@ namespace Com.sgagdr.BlackSky
             //Отбрасыванию пушки назад при выстреле (Ну, отдача по горизонтали, получается)
             currentWeapon.transform.position -= currentWeapon.transform.forward * loadout[currentIndex].kickback;
 
+        }
+
+        [PunRPC]
+        private void TakeDamage(int p_damage)
+        {
+            GetComponent<Motion>().TakeDamage(p_damage);
         }
 
         #endregion

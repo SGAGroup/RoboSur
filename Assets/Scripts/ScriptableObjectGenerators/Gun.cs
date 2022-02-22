@@ -18,6 +18,8 @@ namespace Com.sgagdr.BlackSky
         public string gunName;
         //Модель пукши
         public GameObject prefab;
+        //Урон пушки, БАХ БАХ ТРРРРРРРРРРР ПИУ ПИУ ПИУ БДЫДЫЩЩЩ!!!!!
+        public int damage;
         //Разброс (хз почему блум блять)
         public float bloom;
         //Отдача по вертикали
