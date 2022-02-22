@@ -37,6 +37,7 @@ namespace Com.sgagdr.BlackSky
         private void Start()
         {
             if (photonView.IsMine) cameraParent.SetActive(true);
+            if (!photonView.IsMine) gameObject.layer = 11;//11 - Player, что позволяет оружию наносить им урон
             baseFOV = normalCam.fieldOfView;
             //Включить если в сцене больше чем одна камера
             //if(Camera.main) Camera.main.enabled = false;

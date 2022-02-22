@@ -130,6 +130,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 813448219}
     m_Modifications:
+    - target: {fileID: 4835257368239927602, guid: 11838fad82da75b4b8b9d1eefe4f9341, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 825ac68c9408072479fe65449ff0c403, type: 2}
     - target: {fileID: 5928571321653408549, guid: 11838fad82da75b4b8b9d1eefe4f9341, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -190,6 +194,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Palm
       objectReference: {fileID: 0}
+    - target: {fileID: 7678350578105145017, guid: 11838fad82da75b4b8b9d1eefe4f9341, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 56c0ed1f2c2cc4a4faaa4046f6230a24, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 11838fad82da75b4b8b9d1eefe4f9341, type: 3}
 --- !u!1 &171855667
@@ -419,7 +427,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 69136e24ed640c047989c578979d0fcb, type: 2}
+  - {fileID: 2100000, guid: 3daa528fc04e183499896178e68bdbb1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -456,6 +464,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7862840661885799304, guid: 0c70e068dbad7ea438b5c46259c3b7c0, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7cc37230d8d2c0e4f95af5dee3129ebd, type: 2}
+    - target: {fileID: 7862840662434451401, guid: 0c70e068dbad7ea438b5c46259c3b7c0, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 47ab2e77802e1664285fb2d2d8f3fa17, type: 2}
     - target: {fileID: 7862840662434451403, guid: 0c70e068dbad7ea438b5c46259c3b7c0, type: 3}
       propertyPath: m_Name
       value: Player
@@ -630,7 +646,7 @@ Terrain:
   m_DrawInstanced: 0
   m_DrawTreesAndFoliage: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 10652, guid: 0000000000000000f000000000000000, type: 0}
+  m_MaterialTemplate: {fileID: 2100000, guid: 594ea882c5a793440b60ff72d896021e, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -665,6 +681,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1654969598}
     m_Modifications:
+    - target: {fileID: 7498986721874033552, guid: 6b1e971eba59a8647a6f486922195046, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bfc8c8b9cba255b48b5146a637709c50, type: 2}
     - target: {fileID: 8291475188625939013, guid: 6b1e971eba59a8647a6f486922195046, type: 3}
       propertyPath: m_Name
       value: Rock
@@ -824,6 +844,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 813448219}
     m_Modifications:
+    - target: {fileID: 4835257368239927602, guid: 11838fad82da75b4b8b9d1eefe4f9341, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 825ac68c9408072479fe65449ff0c403, type: 2}
     - target: {fileID: 5928571321653408549, guid: 11838fad82da75b4b8b9d1eefe4f9341, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -884,6 +908,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Palm
       objectReference: {fileID: 0}
+    - target: {fileID: 7678350578105145017, guid: 11838fad82da75b4b8b9d1eefe4f9341, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 56c0ed1f2c2cc4a4faaa4046f6230a24, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 11838fad82da75b4b8b9d1eefe4f9341, type: 3}
 --- !u!1001 &1646679401
@@ -893,6 +921,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1654969598}
     m_Modifications:
+    - target: {fileID: 7498986721874033552, guid: 6b1e971eba59a8647a6f486922195046, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bfc8c8b9cba255b48b5146a637709c50, type: 2}
     - target: {fileID: 8291475188625939013, guid: 6b1e971eba59a8647a6f486922195046, type: 3}
       propertyPath: m_Name
       value: Rock
@@ -1063,6 +1095,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 813448219}
     m_Modifications:
+    - target: {fileID: 4835257368239927602, guid: 11838fad82da75b4b8b9d1eefe4f9341, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 825ac68c9408072479fe65449ff0c403, type: 2}
     - target: {fileID: 5928571321653408549, guid: 11838fad82da75b4b8b9d1eefe4f9341, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1111,6 +1147,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Palm
       objectReference: {fileID: 0}
+    - target: {fileID: 7678350578105145017, guid: 11838fad82da75b4b8b9d1eefe4f9341, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 56c0ed1f2c2cc4a4faaa4046f6230a24, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 11838fad82da75b4b8b9d1eefe4f9341, type: 3}
 --- !u!4 &6753638906548922699 stripped
@@ -1125,6 +1165,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1654969598}
     m_Modifications:
+    - target: {fileID: 7498986721874033552, guid: 6b1e971eba59a8647a6f486922195046, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bfc8c8b9cba255b48b5146a637709c50, type: 2}
     - target: {fileID: 8291475188625939013, guid: 6b1e971eba59a8647a6f486922195046, type: 3}
       propertyPath: m_Name
       value: Rock
