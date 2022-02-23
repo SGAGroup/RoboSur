@@ -492,12 +492,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadout:
   - {fileID: 11400000, guid: 19532497356e82e41b3472e7d1d0ed0f, type: 2}
+  - {fileID: 11400000, guid: 1f1222b26eed90a488c8c9183b2710fa, type: 2}
   weaponParent: {fileID: 7862840661612877196}
   bulletholePrefab: {fileID: 296612812493044449, guid: f1e1553a3d62e524083a96ff0d26dd68, type: 3}
   canBeShot:
     serializedVersion: 2
     m_Bits: 1271
   bulletholeDuration: 10
+  FlameVFX: {fileID: 0}
 --- !u!114 &7862840662434451443
 MonoBehaviour:
   m_ObjectHideFlags: 0

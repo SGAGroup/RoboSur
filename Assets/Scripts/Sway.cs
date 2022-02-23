@@ -14,7 +14,7 @@ namespace Com.sgagdr.BlackSky
 
         public float intensity;
         public float smooth;
-        public bool IsMine;
+        public bool isMine;
 
         private Quaternion origin_rotation;
 
@@ -45,7 +45,7 @@ namespace Com.sgagdr.BlackSky
             float t_x_mouse = Input.GetAxis("Mouse X");
             float t_y_mouse = Input.GetAxis("Mouse Y");
 
-            if (!photonView.IsMine)
+            if (!isMine)
             {
                 t_x_mouse = 0;
                 t_y_mouse = 0;

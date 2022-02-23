@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
+using UnityEngine.Experimental.VFX;
 using Photon.Pun;
 
 namespace Com.sgagdr.BlackSky
@@ -24,6 +26,9 @@ namespace Com.sgagdr.BlackSky
         private int currentIndex;
         private GameObject currentWeapon;
 
+        public GameObject FlameVFX;
+
+
         #endregion
 
         #region  MonoBehaviour Callbacks
@@ -32,19 +37,30 @@ namespace Com.sgagdr.BlackSky
         {
             if (!photonView.IsMine) return;
 
+
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 photonView.RPC("Equip", RpcTarget.All, 0);
             }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                photonView.RPC("Equip", RpcTarget.All, 1);
+            }
+
 
             if (currentWeapon != null)
             {
                 //Если нажата ЛКМ, то внутри функции Aim переменная p_isAiming будет равна истине
                 Aim(Input.GetMouseButton(1));
 
-                if (Input.GetMouseButtonDown(0) && currentCooldown <= 0)
+
+                if (Input.GetMouseButton(0) && currentCooldown <= 0)
                 {
                     photonView.RPC("Shoot", RpcTarget.All);
+                }
+                if (Input.GetMouseButtonUp(0))
+                {
+                    currentWeapon.GetComponent<AudioSource>().Stop();
                 }
 
                 //weapon position elasticity (Ну чтобы тут хранилась позиция пукши, к которой мы можем вернуться, после отдачи например)
@@ -74,7 +90,7 @@ namespace Com.sgagdr.BlackSky
             //Убеждаемся что новый объёкт находится в локальных нулях
             t_newWeapon.transform.localEulerAngles = Vector3.zero;
             //Тоже самое с поворотом
-            t_newWeapon.GetComponent<Sway>().enabled = photonView.IsMine;
+            t_newWeapon.GetComponent<Sway>().isMine = photonView.IsMine;
 
             currentWeapon = t_newWeapon;
         }
@@ -139,7 +155,7 @@ namespace Com.sgagdr.BlackSky
                 if (photonView.IsMine)
                 {
                     //Что-то с тем, что мы попали в игрока
-                    if(t_hit.collider.gameObject.layer == 10)
+                    if (t_hit.collider.gameObject.layer == 10)
                     {
                         //А тут должен быть эффект от урона
                         //И теперь тут есть урон
@@ -155,6 +171,11 @@ namespace Com.sgagdr.BlackSky
             //Отбрасыванию пушки назад при выстреле (Ну, отдача по горизонтали, получается)
             currentWeapon.transform.position -= currentWeapon.transform.forward * loadout[currentIndex].kickback;
 
+            currentWeapon.GetComponentInChildren<VisualEffect>().Play();
+            if (!currentWeapon.GetComponent<AudioSource>().isPlaying)
+            {
+                currentWeapon.GetComponent<AudioSource>().Play();
+            }
         }
 
         [PunRPC]
