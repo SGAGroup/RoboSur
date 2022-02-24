@@ -35,12 +35,14 @@ namespace Com.sgagdr.BlackSky
         public int maxHealth;
         private int currentHealth;
 
+        public Manager manager;
         #endregion
 
         #region  Monobehavior Callbacks
 
         private void Start()
         {
+            manager = GameObject.Find("Manager").GetComponent<Manager>();
             currentHealth = maxHealth;
             if (photonView.IsMine) cameraParent.SetActive(true);
             if (!photonView.IsMine) gameObject.layer = 10;//10 - Player, что позволяет оружию наносить им урон
@@ -145,6 +147,8 @@ namespace Com.sgagdr.BlackSky
         private void Die()
         {
             Debug.Log("You died!");
+            manager.Spawn();
+            PhotonNetwork.Destroy(gameObject);
         }
 
 

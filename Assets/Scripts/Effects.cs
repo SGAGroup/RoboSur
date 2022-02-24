@@ -2,42 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
+using Photon.Pun;
 
-public class Effects : MonoBehaviour
+namespace Com.sgagdr.BlackSky
 {
 
-    #region Variables
-    public VisualEffect shotExplosion;
-    public AudioSource shotSound;
-
-
-    public bool isSoundPlaying = false;
-    #endregion
-
-    #region Public Methods
-    public void PlayEffects()
+    
+    public class Effects : MonoBehaviour
     {
-        if (shotExplosion)
-        {
-            shotExplosion.Play();
-        }
-        if (shotSound && !isSoundPlaying)
-        {
-            shotSound.Play();
-            isSoundPlaying = true;
-        }
+
+        #region Variables
+        public VisualEffect shotExplosion;
+        public AudioSource shotSound;
+
+        #endregion
+
+        #region Public Methods
+       
+
+        #endregion
+
     }
-
-    public void StopSound()
-    {
-        if (shotSound)
-        {
-            shotSound.Stop();
-            isSoundPlaying = false;
-        }
-    }
-
-
-    #endregion 
-
 }

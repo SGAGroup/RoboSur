@@ -61,7 +61,7 @@ namespace Com.sgagdr.BlackSky
                 }
                 if (Input.GetMouseButtonUp(0))
                 {
-                    currentShotEffects.StopSound();
+                    photonView.RPC("StopSound", RpcTarget.All);
                 }
 
                 //weapon position elasticity (Ну чтобы тут хранилась позиция пукши, к которой мы можем вернуться, после отдачи например)
@@ -173,7 +173,7 @@ namespace Com.sgagdr.BlackSky
             //Отбрасыванию пушки назад при выстреле (Ну, отдача по горизонтали, получается)
             currentWeapon.transform.position -= currentWeapon.transform.forward * loadout[currentIndex].kickback;
 
-            currentShotEffects.PlayEffects();
+            photonView.RPC("PlayEffects", RpcTarget.All);
 
         }
 
@@ -182,6 +182,35 @@ namespace Com.sgagdr.BlackSky
         {
             GetComponent<Motion>().TakeDamage(p_damage);
         }
+
+        [PunRPC]
+        public void PlayEffects()
+        {
+            if (photonView.IsMine)
+            {
+                if (currentShotEffects.shotExplosion)
+                {
+                    currentShotEffects.shotExplosion.Play();
+                }
+                if (currentShotEffects.shotSound && !currentShotEffects.shotSound.isPlaying)
+                {
+                    currentShotEffects.shotSound.Play();
+                }
+            }
+        }
+        [PunRPC]
+        public void StopSound()
+        {
+            if (photonView.IsMine)
+            {
+                if (currentShotEffects.shotSound)
+                {
+                    currentShotEffects.shotSound.Stop();
+                }
+            }
+        }
+
+
 
         #endregion
 

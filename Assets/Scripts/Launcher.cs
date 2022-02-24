@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-namespace Com.sgagdr.SimpleHostile
+namespace Com.sgagdr.BlackSky
 {
     public class Launcher : MonoBehaviourPunCallbacks
     {

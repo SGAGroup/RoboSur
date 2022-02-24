@@ -40,7 +40,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3491186679830512196}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 57e1f1cc34e3c794f964ad6f54a1cbde, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: 17fe77722f433324eb667a9a55dbd6c9, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
@@ -54,7 +54,10 @@ VisualEffect:
     m_Vector3f:
       m_Array: []
     m_Vector4f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 1.697184, y: 16.94838, z: 0, w: 1}
+        m_Name: Color01
+        m_Overridden: 1
     m_Uint:
       m_Array: []
     m_Int:
@@ -201,7 +204,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 063075040607a984ca5e5175674f372e, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 140dcbbf8b64935498fb3d77e21c26c8, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.507
   m_Pitch: 1
@@ -301,7 +304,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shotExplosion: {fileID: 5829414217070894454}
   shotSound: {fileID: 4420799675870645525}
-  isSoundPlaying: 0
 --- !u!1 &7390295896098548087
 GameObject:
   m_ObjectHideFlags: 0
