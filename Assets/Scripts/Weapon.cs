@@ -28,10 +28,11 @@ namespace Com.sgagdr.BlackSky
 
         public GameObject FlameVFX;
 
-
+        private Effects currentShotEffects;
         #endregion
 
         #region  MonoBehaviour Callbacks
+
 
         void Update()
         {
@@ -60,7 +61,7 @@ namespace Com.sgagdr.BlackSky
                 }
                 if (Input.GetMouseButtonUp(0))
                 {
-                    currentWeapon.GetComponent<AudioSource>().Stop();
+                    currentShotEffects.StopSound();
                 }
 
                 //weapon position elasticity (Ну чтобы тут хранилась позиция пукши, к которой мы можем вернуться, после отдачи например)
@@ -93,6 +94,7 @@ namespace Com.sgagdr.BlackSky
             t_newWeapon.GetComponent<Sway>().isMine = photonView.IsMine;
 
             currentWeapon = t_newWeapon;
+            currentShotEffects = currentWeapon.GetComponent<Effects>();
         }
 
         void Aim(bool p_isAiming)
@@ -171,11 +173,8 @@ namespace Com.sgagdr.BlackSky
             //Отбрасыванию пушки назад при выстреле (Ну, отдача по горизонтали, получается)
             currentWeapon.transform.position -= currentWeapon.transform.forward * loadout[currentIndex].kickback;
 
-            currentWeapon.GetComponentInChildren<VisualEffect>().Play();
-            if (!currentWeapon.GetComponent<AudioSource>().isPlaying)
-            {
-                currentWeapon.GetComponent<AudioSource>().Play();
-            }
+            currentShotEffects.PlayEffects();
+
         }
 
         [PunRPC]
