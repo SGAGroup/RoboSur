@@ -4,12 +4,12 @@ using UnityEngine;
 using Photon.Pun;
 
 
-namespace Com.sgagdr.SimpleHostile
+namespace Com.sgagdr.BlackSky
 {
     public class Manager : MonoBehaviour
     {
         public string playerPrefab;
-        public Transform spawnPoint;
+        public Transform[] spawnPoints;
         void Start()
         {
             Spawn();
@@ -17,7 +17,8 @@ namespace Com.sgagdr.SimpleHostile
 
         public void Spawn()
         {
-            PhotonNetwork.Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
+            Transform t_spawn = spawnPoints[Random.Range(0, spawnPoints.Length)];
+            PhotonNetwork.Instantiate(playerPrefab, t_spawn.position, t_spawn.rotation);
         }
     }
 }
