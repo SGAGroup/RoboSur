@@ -20,3 +20,7 @@ MonoBehaviour:
   kickback: 0.15
   firerate: 0.9
   aimSpeed: 9
+  shotClip: {fileID: 8300000, guid: e0cbb6c0f2e8257438b00be2c310c9fd, type: 3}
+  pitchRand: 0.05
+  clipVolume: 0.117
+  shotEffect: {fileID: 8926484042661614526, guid: 17fe77722f433324eb667a9a55dbd6c9, type: 3}

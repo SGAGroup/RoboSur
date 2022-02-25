@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Com.sgagdr.BlackSky
 {
@@ -30,6 +31,13 @@ namespace Com.sgagdr.BlackSky
         public float firerate;
         //Скорость прицеливания
         public float aimSpeed;
+
+        public AudioClip shotClip;
+        public float pitchRand;
+        [Range(0f, 2f)]
+        public float clipVolume; 
+
+        public VisualEffectAsset shotEffect;
     }
 
     #endregion
