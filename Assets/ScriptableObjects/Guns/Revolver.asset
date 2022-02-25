@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba548f07b8e2b5441871138b9b39c9ac, type: 3}
   m_Name: Revolver
   m_EditorClassIdentifier: 
-  gunName: 
+  gunName: Revolver
   prefab: {fileID: 7390295895853488510, guid: c3314492a8f42aa4aa7795e3625a6d69, type: 3}
   damage: 10
   bloom: 20
