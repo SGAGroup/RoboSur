@@ -29,10 +29,17 @@ namespace Com.sgagdr.BlackSky
 
         public AudioSource sfx;
 
+        private int equipID = 0;
+        private int lastCountOfPlayers = 0;
+
         #endregion
 
         #region  MonoBehaviour Callbacks
 
+        private void Start()
+        {
+            lastCountOfPlayers = PhotonNetwork.CountOfPlayers;
+        }
 
         void Update()
         {
@@ -41,11 +48,13 @@ namespace Com.sgagdr.BlackSky
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                photonView.RPC("Equip", RpcTarget.All, 0);
+                equipID = 0;
+                photonView.RPC("Equip", RpcTarget.All, equipID);
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                photonView.RPC("Equip", RpcTarget.All, 1);
+                equipID = 1;
+                photonView.RPC("Equip", RpcTarget.All, equipID);
             }
 
 
@@ -66,13 +75,30 @@ namespace Com.sgagdr.BlackSky
                 //cooldown
                 if (currentCooldown > 0) currentCooldown -= Time.deltaTime;
             }
+
+            if(lastCountOfPlayers != PhotonNetwork.CountOfPlayers)
+            {
+                photonView.RPC("Equip", RpcTarget.All, equipID);
+                lastCountOfPlayers = PhotonNetwork.CountOfPlayers;
+            }
         }
 
         #endregion
 
+        #region Photon Callbacks
+            
+            
+            
+        #endregion
+
+
+
+
         #region Private Methods
 
         //Когда хотим взять определённое оружие вызываем эту функцию. p_ind номер оружия которое хотим достать
+
+
 
         [PunRPC]
         void Equip(int p_ind)
@@ -175,14 +201,14 @@ namespace Com.sgagdr.BlackSky
             PlayVFX(currentGunData, currentWeapon);
 
             //gun fx
-            
+
 
         }
 
         [PunRPC]
         private void TakeDamage(int p_damage)
         {
-            GetComponent<Motion>().TakeDamage(p_damage);
+            GetComponent<Player>().TakeDamage(p_damage);
         }
 
         private void PlaySFX(Gun curGunDat)
