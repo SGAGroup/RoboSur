@@ -13,6 +13,7 @@ namespace Com.sgagdr.BlackSky
         #region Variables
 
         public Gun[] loadout;
+        private Gun currentGunData;
         //Из-за [] можно хранить несколько предметов в одном gameobject'e
         //Как массив, но не массив, ебать!
         public Transform weaponParent;
@@ -26,13 +27,19 @@ namespace Com.sgagdr.BlackSky
         private int currentIndex;
         private GameObject currentWeapon;
 
-        public GameObject FlameVFX;
+        public AudioSource sfx;
 
-        private Effects currentShotEffects;
+        private int equipID = 0;
+        private int lastCountOfPlayers = 0;
+
         #endregion
 
         #region  MonoBehaviour Callbacks
 
+        private void Start()
+        {
+            lastCountOfPlayers = PhotonNetwork.CountOfPlayers;
+        }
 
         void Update()
         {
@@ -41,11 +48,13 @@ namespace Com.sgagdr.BlackSky
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                photonView.RPC("Equip", RpcTarget.All, 0);
+                equipID = 0;
+                photonView.RPC("Equip", RpcTarget.All, equipID);
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                photonView.RPC("Equip", RpcTarget.All, 1);
+                equipID = 1;
+                photonView.RPC("Equip", RpcTarget.All, equipID);
             }
 
 
@@ -59,10 +68,6 @@ namespace Com.sgagdr.BlackSky
                 {
                     photonView.RPC("Shoot", RpcTarget.All);
                 }
-                if (Input.GetMouseButtonUp(0))
-                {
-                    photonView.RPC("StopSound", RpcTarget.All);
-                }
 
                 //weapon position elasticity (Ну чтобы тут хранилась позиция пукши, к которой мы можем вернуться, после отдачи например)
                 currentWeapon.transform.localPosition = Vector3.Lerp(currentWeapon.transform.localPosition, Vector3.zero, Time.deltaTime * 4f);
@@ -70,13 +75,30 @@ namespace Com.sgagdr.BlackSky
                 //cooldown
                 if (currentCooldown > 0) currentCooldown -= Time.deltaTime;
             }
+
+            if(lastCountOfPlayers != PhotonNetwork.CountOfPlayers)
+            {
+                photonView.RPC("Equip", RpcTarget.All, equipID);
+                lastCountOfPlayers = PhotonNetwork.CountOfPlayers;
+            }
         }
 
         #endregion
 
+        #region Photon Callbacks
+            
+            
+            
+        #endregion
+
+
+
+
         #region Private Methods
 
         //Когда хотим взять определённое оружие вызываем эту функцию. p_ind номер оружия которое хотим достать
+
+
 
         [PunRPC]
         void Equip(int p_ind)
@@ -84,8 +106,9 @@ namespace Com.sgagdr.BlackSky
             if (currentWeapon != null) Destroy(currentWeapon);
 
             currentIndex = p_ind;
+            currentGunData = loadout[p_ind];
 
-            GameObject t_newWeapon = Instantiate(loadout[p_ind].prefab, weaponParent.position, weaponParent.rotation, weaponParent) as GameObject;
+            GameObject t_newWeapon = Instantiate(currentGunData.prefab, weaponParent.position, weaponParent.rotation, weaponParent) as GameObject;
             //Создаём объёкт с номером p_ind на позиции weaponParent с тем же поворотом, и зачем то даём Transform WeaponParenta'a
             t_newWeapon.transform.localPosition = Vector3.zero;
             //Убеждаемся что новый объёкт находится в локальных нулях
@@ -94,7 +117,7 @@ namespace Com.sgagdr.BlackSky
             t_newWeapon.GetComponent<Sway>().isMine = photonView.IsMine;
 
             currentWeapon = t_newWeapon;
-            currentShotEffects = currentWeapon.GetComponent<Effects>();
+            currentWeapon.GetComponentInChildren<VisualEffect>().visualEffectAsset = currentGunData.shotEffect;
         }
 
         void Aim(bool p_isAiming)
@@ -164,53 +187,43 @@ namespace Com.sgagdr.BlackSky
                         //Наносим урон равный урону текущего оружия, сообщаем всем
                         t_hit.collider.gameObject.GetPhotonView().RPC("TakeDamage", RpcTarget.All, loadout[currentIndex].damage);
                     }
+                    //Отдача по вертикали
+                    currentWeapon.transform.Rotate(-loadout[currentIndex].recoil, 0, 0);
+                    //Отбрасыванию пушки назад при выстреле (Ну, отдача по горизонтали, получается)
+                    currentWeapon.transform.position -= currentWeapon.transform.forward * loadout[currentIndex].kickback;
                 }
             }
+
+            //Gun SFX
+            PlaySFX(currentGunData);
+
+            //Gun VFX
+            PlayVFX(currentGunData, currentWeapon);
+
             //gun fx
 
-            //Отдача по вертикали
-            currentWeapon.transform.Rotate(-loadout[currentIndex].recoil, 0, 0);
-            //Отбрасыванию пушки назад при выстреле (Ну, отдача по горизонтали, получается)
-            currentWeapon.transform.position -= currentWeapon.transform.forward * loadout[currentIndex].kickback;
-
-            photonView.RPC("PlayEffects", RpcTarget.All);
 
         }
 
         [PunRPC]
         private void TakeDamage(int p_damage)
         {
-            GetComponent<Motion>().TakeDamage(p_damage);
+            GetComponent<Player>().TakeDamage(p_damage);
         }
 
-        [PunRPC]
-        public void PlayEffects()
+        private void PlaySFX(Gun curGunDat)
         {
-            if (photonView.IsMine)
-            {
-                if (currentShotEffects.shotExplosion)
-                {
-                    currentShotEffects.shotExplosion.Play();
-                }
-                if (currentShotEffects.shotSound && !currentShotEffects.shotSound.isPlaying)
-                {
-                    currentShotEffects.shotSound.Play();
-                }
-            }
+            sfx.Stop();
+            sfx.volume = curGunDat.clipVolume;
+            sfx.clip = curGunDat.shotClip;
+            sfx.pitch = 1 - curGunDat.pitchRand + Random.Range(-curGunDat.pitchRand, curGunDat.pitchRand);
+            sfx.Play();
         }
-        [PunRPC]
-        public void StopSound()
+
+        private void PlayVFX(Gun curGunDat, GameObject curWeap)
         {
-            if (photonView.IsMine)
-            {
-                if (currentShotEffects.shotSound)
-                {
-                    currentShotEffects.shotSound.Stop();
-                }
-            }
+            currentWeapon.GetComponentInChildren<VisualEffect>().Play();
         }
-
-
 
         #endregion
 

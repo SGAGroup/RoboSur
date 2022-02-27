@@ -5,7 +5,7 @@ using Photon.Pun;
 
 namespace Com.sgagdr.BlackSky
 {
-    public class Motion : MonoBehaviourPun
+    public class Player : MonoBehaviourPun
     {
 
         #region  Variables
@@ -35,6 +35,9 @@ namespace Com.sgagdr.BlackSky
         public int maxHealth;
         private int currentHealth;
 
+        //Hud
+        private Transform ui_HealthBar;
+
         public Manager manager;
         #endregion
 
@@ -51,6 +54,12 @@ namespace Com.sgagdr.BlackSky
             //if(Camera.main) Camera.main.enabled = false;
             rig = GetComponent<Rigidbody>();
             weaponParentOrigin = weaponParent.localPosition;
+
+            if (photonView.IsMine)
+            {
+                ui_HealthBar = GameObject.Find("HUD/Health/HP").transform;
+                UpdateHealthbar();
+            }
         }
 
         private void Update()
@@ -151,6 +160,11 @@ namespace Com.sgagdr.BlackSky
             PhotonNetwork.Destroy(gameObject);
         }
 
+        private void UpdateHealthbar()
+        {
+            float healthRatio = 1f*currentHealth / maxHealth;
+            ui_HealthBar.localScale = new Vector3(healthRatio,1f,1f);
+        }
 
         #endregion
 
@@ -162,8 +176,9 @@ namespace Com.sgagdr.BlackSky
             {
                 currentHealth -= p_damage;
                 Debug.Log("Get " + p_damage + " damage. Current health: " + currentHealth);
+                UpdateHealthbar();
 
-                if(currentHealth <= 0)
+                if (currentHealth <= 0)
                 {
                     Die();
                 }
