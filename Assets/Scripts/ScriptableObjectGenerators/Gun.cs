@@ -37,7 +37,10 @@ namespace Com.sgagdr.BlackSky
         [Range(0f, 2f)]
         public float clipVolume; 
 
+
+        [Header("Visual Settings")]
         public VisualEffectAsset shotEffect;
+        public GameObject trail;
     }
 
     #endregion

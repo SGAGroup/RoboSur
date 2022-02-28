@@ -15,7 +15,7 @@ MonoBehaviour:
   gunName: RPK
   prefab: {fileID: 1336728416877736957, guid: fdd85699fea1a7140a80c381b7bc594b, type: 3}
   damage: 10
-  bloom: 19.9
+  bloom: 15.2
   recoil: 9.96
   kickback: 0.19
   firerate: 0.1
@@ -24,3 +24,4 @@ MonoBehaviour:
   pitchRand: 0.1
   clipVolume: 2
   shotEffect: {fileID: 8926484042661614526, guid: 57e1f1cc34e3c794f964ad6f54a1cbde, type: 3}
+  trail: {fileID: 3510744921592133087, guid: 61b7f5b988420524c979f1ad8a3dc5c0, type: 3}

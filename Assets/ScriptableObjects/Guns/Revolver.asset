@@ -15,7 +15,7 @@ MonoBehaviour:
   gunName: Revolver
   prefab: {fileID: 7390295895853488510, guid: c3314492a8f42aa4aa7795e3625a6d69, type: 3}
   damage: 50
-  bloom: 20
+  bloom: 5.01
   recoil: 20
   kickback: 0.15
   firerate: 0.9
@@ -24,3 +24,4 @@ MonoBehaviour:
   pitchRand: 0.05
   clipVolume: 0.117
   shotEffect: {fileID: 8926484042661614526, guid: 17fe77722f433324eb667a9a55dbd6c9, type: 3}
+  trail: {fileID: 2113483004428295138, guid: edf203b90fd45b445ba7be8b1507c8a8, type: 3}

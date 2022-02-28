@@ -37,6 +37,8 @@ namespace Com.sgagdr.BlackSky
 
         //Hud
         private Transform ui_HealthBar;
+        public GameObject ui_DmgIndicator;
+        private float indicatorBlinkTime = 0.25f;
 
         public Manager manager;
         #endregion
@@ -58,6 +60,8 @@ namespace Com.sgagdr.BlackSky
             if (photonView.IsMine)
             {
                 ui_HealthBar = GameObject.Find("HUD/Health/HP").transform;
+                ui_DmgIndicator = GameObject.Find("HUD/DmgIndicator");
+                ui_DmgIndicator.SetActive(false);
                 UpdateHealthbar();
             }
         }
@@ -166,6 +170,13 @@ namespace Com.sgagdr.BlackSky
             ui_HealthBar.localScale = new Vector3(healthRatio,1f,1f);
         }
 
+        private IEnumerator ShowDmgIndicator()
+        {
+            yield return new WaitForSecondsRealtime(indicatorBlinkTime);   
+            ui_DmgIndicator.SetActive(false);
+            
+        }
+
         #endregion
 
         #region Public Methods
@@ -177,6 +188,8 @@ namespace Com.sgagdr.BlackSky
                 currentHealth -= p_damage;
                 Debug.Log("Get " + p_damage + " damage. Current health: " + currentHealth);
                 UpdateHealthbar();
+                ui_DmgIndicator.SetActive(true);
+                StartCoroutine(ShowDmgIndicator());
 
                 if (currentHealth <= 0)
                 {

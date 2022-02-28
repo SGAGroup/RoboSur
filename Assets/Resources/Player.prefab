@@ -510,6 +510,7 @@ MonoBehaviour:
     m_Bits: 64
   weaponParent: {fileID: 7862840661612877196}
   maxHealth: 100
+  ui_DmgIndicator: {fileID: 0}
   manager: {fileID: 0}
 --- !u!114 &7862840662434451442
 MonoBehaviour:

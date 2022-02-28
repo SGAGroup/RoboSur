@@ -45,6 +45,10 @@ namespace Com.sgagdr.BlackSky
         {
             if (!photonView.IsMine) return;
 
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                photonView.RPC("TakeDamage", RpcTarget.All, 20);
+            }
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
@@ -176,7 +180,10 @@ namespace Com.sgagdr.BlackSky
                 t_newHole.transform.LookAt(t_hit.point + t_hit.normal);
                 Destroy(t_newHole, bulletholeDuration);
 
-                //Штото с тем, что мы это мы
+                GameObject t_newTrail = Instantiate(currentGunData.trail, currentWeapon.transform.position, Quaternion.identity);
+                t_newTrail.GetComponent<TrailScript>().direction = t_bloom;
+
+                    //Штото с тем, что мы это мы
                 if (photonView.IsMine)
                 {
                     //Что-то с тем, что мы попали в игрока
