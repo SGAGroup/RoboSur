@@ -22,6 +22,12 @@ namespace Com.sgagdr.BlackSky
         //Урон пушки, БАХ БАХ ТРРРРРРРРРРР ПИУ ПИУ ПИУ БДЫДЫЩЩЩ!!!!!
         public int damage;
         //Разброс (хз почему блум блять)
+        public int ammo;
+        //Патроны
+        public int clipsize;
+        //Магазин
+        public float reload;
+        //Время на перезарядку
         public float bloom;
         //Отдача по вертикали
         public float recoil;
@@ -37,10 +43,38 @@ namespace Com.sgagdr.BlackSky
         [Range(0f, 2f)]
         public float clipVolume; 
 
+        private int stash; // Текущее кол-во патронов
+        private int clip; // Текущее кол-во патронов в магазине 
 
         [Header("Visual Settings")]
         public VisualEffectAsset shotEffect;
         public GameObject trail;
+
+        public void Initialize()
+        {
+            stash = ammo;
+            clip = clipsize;
+        }
+
+        public bool FireBullet()
+        {
+            if(clip > 0)
+            {
+                clip -= 1;
+                return true;
+            }
+            else return false;
+        }
+
+        public void Reload()
+        {
+            stash += clip;
+            clip = Mathf.Min(clipsize, stash);
+            stash -= clip;
+        }
+
+        public int GetStash() {return stash; }
+        public int GetClip() {return clip; }
     }
 
     #endregion

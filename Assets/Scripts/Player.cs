@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 using Photon.Pun;
 
@@ -37,10 +38,13 @@ namespace Com.sgagdr.BlackSky
 
         //Hud
         private Transform ui_HealthBar;
+        private Text ui_ammo;
         public GameObject ui_DmgIndicator;
         private float indicatorBlinkTime = 0.25f;
 
         public Manager manager;
+        private Weapon weapon;
+
         #endregion
 
         #region  Monobehavior Callbacks
@@ -48,6 +52,7 @@ namespace Com.sgagdr.BlackSky
         private void Start()
         {
             manager = GameObject.Find("Manager").GetComponent<Manager>();
+            weapon = GetComponent<Weapon>();
             currentHealth = maxHealth;
             if (photonView.IsMine) cameraParent.SetActive(true);
             if (!photonView.IsMine) gameObject.layer = 10;//10 - Player, что позволяет оружию наносить им урон
@@ -60,6 +65,7 @@ namespace Com.sgagdr.BlackSky
             if (photonView.IsMine)
             {
                 ui_HealthBar = GameObject.Find("HUD/Health/HP").transform;
+                ui_ammo = GameObject.Find("HUD/Ammo/AmmoText").GetComponent<Text>();
                 ui_DmgIndicator = GameObject.Find("HUD/DmgIndicator");
                 ui_DmgIndicator.SetActive(false);
                 UpdateHealthbar();
@@ -110,6 +116,10 @@ namespace Com.sgagdr.BlackSky
                 movementCount += Time.deltaTime * 7f;
                 weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetHeadBobPos, Time.deltaTime * 10f);
             }
+
+            //UI Refreshes
+            //RefreshHealthBar(); - У мужика есть эта строка, нам она точно не нужна (прост её не было)
+            weapon.RefreshAmmo(ui_ammo);
 
         }
 

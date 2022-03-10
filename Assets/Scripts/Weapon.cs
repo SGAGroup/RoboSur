@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.VFX;
 using UnityEngine.Experimental.VFX;
@@ -27,6 +28,8 @@ namespace Com.sgagdr.BlackSky
         private int currentIndex;
         private GameObject currentWeapon;
 
+        private bool isReloading;
+
         public AudioSource sfx;
 
         private int equipID = 0;
@@ -39,6 +42,9 @@ namespace Com.sgagdr.BlackSky
         private void Start()
         {
             lastCountOfPlayers = PhotonNetwork.CountOfPlayers;
+
+            foreach(Gun a in loadout) a.Initialize();
+            Equip(0);
         }
 
         void Update()
@@ -70,8 +76,11 @@ namespace Com.sgagdr.BlackSky
 
                 if (Input.GetMouseButton(0) && currentCooldown <= 0)
                 {
-                    photonView.RPC("Shoot", RpcTarget.All);
+                    if(loadout[currentIndex].FireBullet()) photonView.RPC("Shoot", RpcTarget.All);
+                    else StartCoroutine(Reload(loadout[currentIndex].reload));
                 }
+
+                if(Input.GetKeyDown(KeyCode.R)) StartCoroutine(Reload(loadout[currentIndex].reload));
 
                 //weapon position elasticity (Ну чтобы тут хранилась позиция пукши, к которой мы можем вернуться, после отдачи например)
                 currentWeapon.transform.localPosition = Vector3.Lerp(currentWeapon.transform.localPosition, Vector3.zero, Time.deltaTime * 4f);
@@ -101,13 +110,30 @@ namespace Com.sgagdr.BlackSky
         #region Private Methods
 
         //Когда хотим взять определённое оружие вызываем эту функцию. p_ind номер оружия которое хотим достать
+        
+        IEnumerator Reload (float p_wait)
+        {
+            //Пошла перезарядка
+            isReloading = true;
+            currentWeapon.SetActive(false);
 
-
+            //Ждём её окончания p_wait секунд (yield, кстати корутина)
+            yield return new WaitForSeconds(p_wait);
+            
+            //Заканчиваем перезарядку
+            loadout[currentIndex].Reload();
+            currentWeapon.SetActive(true);
+            isReloading = false;
+        }
 
         [PunRPC]
         void Equip(int p_ind)
         {
-            if (currentWeapon != null) Destroy(currentWeapon);
+            if (currentWeapon != null) 
+            {
+                if(isReloading) StopCoroutine("Reload");
+                Destroy(currentWeapon);
+            }
 
             currentIndex = p_ind;
             currentGunData = loadout[p_ind];
@@ -234,6 +260,17 @@ namespace Com.sgagdr.BlackSky
 
         #endregion
 
+        #region Public Methods
+
+        public void RefreshAmmo (Text p_text)
+        {
+            int t_clip = loadout[currentIndex].GetClip();
+            int t_stash = loadout[currentIndex].GetStash();
+
+            p_text.text = t_clip.ToString("D2") + " / " + t_stash.ToString("D2");
+        }
+
+        #endregion
     }
 }
 
