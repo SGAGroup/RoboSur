@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba548f07b8e2b5441871138b9b39c9ac, type: 3}
+  m_Name: BattlePan
+  m_EditorClassIdentifier: 
+  gunName: BigBen
+  damage: 50
+  prefab: {fileID: 5821635380701155427, guid: a531edea36e432548a332ed506ea6806, type: 3}
+  weaponType: 1
+  ammoType: -1
+  ammo: 999999
+  clipsize: 99999
+  reload: 0
+  bloom: 0
+  recoil: 0
+  kickback: 0
+  firerate: 0.5
+  aimSpeed: 0
+  shotClip: {fileID: 8300000, guid: bab94d57c40c06b49827f04189fe0763, type: 3}
+  reloadClip: {fileID: 0}
+  pitchRand: 0.1
+  clipVolume: 0.2
+  shotEffect: {fileID: 0}
+  trail: {fileID: 0}
+  posInLoadOut: 0

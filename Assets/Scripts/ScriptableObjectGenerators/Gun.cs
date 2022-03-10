@@ -5,6 +5,7 @@ using UnityEngine.VFX;
 
 namespace Com.sgagdr.BlackSky
 {
+
     //Здесь короче база для всех пушек будет
 
     //Создаём возможность правой кнопкой мыши в папке Assets создавать прекол
@@ -13,16 +14,10 @@ namespace Com.sgagdr.BlackSky
     #region Private Methods
     
     //Сюда можно добавить что душе угодно
-    public class Gun : ScriptableObject
+    public class Gun : Ammunition
     {
-        public typeOfAmmo type;
-
-        //Имя пукши
-        public string gunName;
-        //Модель пукши
-        public GameObject prefab;
-        //Урон пушки, БАХ БАХ ТРРРРРРРРРРР ПИУ ПИУ ПИУ БДЫДЫЩЩЩ!!!!!
-        public int damage;
+        public typeOfAmmo ammoType;
+        
         //Разброс (хз почему блум блять)
         public int ammo;
         //Патроны

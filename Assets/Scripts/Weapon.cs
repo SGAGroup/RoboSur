@@ -8,6 +8,20 @@ using Photon.Pun;
 
 namespace Com.sgagdr.BlackSky
 {
+    public enum typeOfAmmo : int
+    {
+        none = -1,
+        revolver = 0,
+        rpk = 1
+    }
+    public enum typeOfWeapon : int
+    {
+        Gun = 0,
+        Melee = 1
+    };
+
+
+
     public class Weapon : MonoBehaviourPun
     {
 
@@ -51,7 +65,9 @@ namespace Com.sgagdr.BlackSky
 
             for (int i = 0; i < loadout.Length; i++)
             {
-                loadout[i].Initialize();
+                Gun curGun = loadout[i];
+                //if (curGun.weaponType == typeOfWeapon.Gun) 
+                    curGun.Initialize();
             }
             Equip(0);
         }
@@ -75,11 +91,15 @@ namespace Com.sgagdr.BlackSky
                 equipID = 1;
                 photonView.RPC("Equip", RpcTarget.All, equipID);
             }
-
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                equipID = 2;
+                photonView.RPC("Equip", RpcTarget.All, equipID);
+            }
 
             if (currentWeapon != null)
             {
-                isAbleToReload = (currentGunData.GetStash() > 0);
+                isAbleToReload = (currentGunData.GetStash() > 0 && currentGunData.weaponType == typeOfWeapon.Gun);
 
                 //Если нажата ЛКМ, то внутри функции Aim переменная p_isAiming будет равна истине
                 Aim(Input.GetMouseButton(1));
@@ -87,10 +107,18 @@ namespace Com.sgagdr.BlackSky
 
                 if (Input.GetMouseButton(0) && currentCooldown <= 0 && !isReloading)
                 {
-                    if (loadout[currentIndex].FireBullet()) photonView.RPC("Shoot", RpcTarget.All);
-                    else if (isAbleToReload)
+                    if (loadout[currentIndex].weaponType == typeOfWeapon.Gun)
                     {
-                        StartCoroutine(Reload(loadout[currentIndex].reload));
+
+                        if (loadout[currentIndex].FireBullet()) photonView.RPC("Shoot", RpcTarget.All);
+                        else if (isAbleToReload)
+                        {
+                            StartCoroutine(Reload(loadout[currentIndex].reload));
+                        }
+                    }
+                    else
+                    {
+                        photonView.RPC("Shoot", RpcTarget.All);
                     }
                 }
 
@@ -204,56 +232,58 @@ namespace Com.sgagdr.BlackSky
         {
 
 
-
             //Получаем положение нашей камеры
             Transform t_spawn = transform.Find("Cameras/Normal Camera");
 
-            //Разброс (хз почему этот уёбок говорит, что bloom - это разброс)            
-            //Создали точку, которая находится на расстоянии 1000 юнитивских единиц от игрока
-            Vector3 t_bloom = t_spawn.position + t_spawn.forward * 1000f;
+            //Если пушка огнестрельная - то там всякая фигня с лучами и т.д.
+            if (currentGunData.weaponType == typeOfWeapon.Gun)
+            {
+
+                //Разброс (хз почему этот уёбок говорит, что bloom - это разброс)            
+                //Создали точку, которая находится на расстоянии 1000 юнитивских единиц от игрока
+                Vector3 t_bloom = t_spawn.position + t_spawn.forward * 1000f;
 
 
 
 
-            //А вот тут чет сложное, не совсем понял, че к чему(sad story)
-            t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.up;
-            t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.right;
-            t_bloom -= t_spawn.position;
-            t_bloom.Normalize();
+                //А вот тут чет сложное, не совсем понял, че к чему(sad story)
+                t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.up;
+                t_bloom += Random.Range(-loadout[currentIndex].bloom, loadout[currentIndex].bloom) * t_spawn.right;
+                t_bloom -= t_spawn.position;
+                t_bloom.Normalize();
+                //raycast
+                RaycastHit t_hit = new RaycastHit();
+                //Пальнули невидимый лучом из камеры (t_spawn.position) в направлении синей стрелки (t_spawn.forward) записали положение попадания в t_hit
+                if (Physics.Raycast(t_spawn.position, t_bloom, out t_hit, 1000f, canBeShot))
+                {
+                    GameObject t_newHole = Instantiate(bulletholePrefab, t_hit.point + t_hit.normal * 0.002f, Quaternion.identity) as GameObject;
+                    t_newHole.transform.LookAt(t_hit.point + t_hit.normal);
+                    Destroy(t_newHole, bulletholeDuration);
+
+                    GameObject t_newTrail = Instantiate(currentGunData.trail, currentWeapon.transform.position, Quaternion.identity);
+                    t_newTrail.GetComponent<TrailScript>().finalPoint = t_hit.point + t_hit.normal * 0.002f;
+
+                    //Штото с тем, что мы это мы
+                    if (photonView.IsMine)
+                    {
+                        //Что-то с тем, что мы попали в игрока
+                        if (t_hit.collider.gameObject.layer == 10)
+                        {
+                            //А тут должен быть эффект от урона
+                            //И теперь тут есть урон
+                            //Наносим урон равный урону текущего оружия, сообщаем всем
+                            t_hit.collider.gameObject.GetPhotonView().RPC("TakeDamage", RpcTarget.All, loadout[currentIndex].damage);
+                        }
+                        //Отдача по вертикали
+                        currentWeapon.transform.Rotate(-loadout[currentIndex].recoil, 0, 0);
+                        //Отбрасыванию пушки назад при выстреле (Ну, отдача по горизонтали, получается)
+                        currentWeapon.transform.position -= currentWeapon.transform.forward * loadout[currentIndex].kickback;
+                    }
+                }
+            }
 
             //cooldown
             currentCooldown = loadout[currentIndex].firerate;
-
-
-            //raycast
-            RaycastHit t_hit = new RaycastHit();
-            //Пальнули невидимый лучом из камеры (t_spawn.position) в направлении синей стрелки (t_spawn.forward) записали положение попадания в t_hit
-            if (Physics.Raycast(t_spawn.position, t_bloom, out t_hit, 1000f, canBeShot))
-            {
-                GameObject t_newHole = Instantiate(bulletholePrefab, t_hit.point + t_hit.normal * 0.002f, Quaternion.identity) as GameObject;
-                t_newHole.transform.LookAt(t_hit.point + t_hit.normal);
-                Destroy(t_newHole, bulletholeDuration);
-
-                GameObject t_newTrail = Instantiate(currentGunData.trail, currentWeapon.transform.position, Quaternion.identity);
-                t_newTrail.GetComponent<TrailScript>().finalPoint = t_hit.point + t_hit.normal * 0.002f;
-
-                //Штото с тем, что мы это мы
-                if (photonView.IsMine)
-                {
-                    //Что-то с тем, что мы попали в игрока
-                    if (t_hit.collider.gameObject.layer == 10)
-                    {
-                        //А тут должен быть эффект от урона
-                        //И теперь тут есть урон
-                        //Наносим урон равный урону текущего оружия, сообщаем всем
-                        t_hit.collider.gameObject.GetPhotonView().RPC("TakeDamage", RpcTarget.All, loadout[currentIndex].damage);
-                    }
-                    //Отдача по вертикали
-                    currentWeapon.transform.Rotate(-loadout[currentIndex].recoil, 0, 0);
-                    //Отбрасыванию пушки назад при выстреле (Ну, отдача по горизонтали, получается)
-                    currentWeapon.transform.position -= currentWeapon.transform.forward * loadout[currentIndex].kickback;
-                }
-            }
 
             //Gun SFX
             PlaySFX(currentGunData);
@@ -283,7 +313,12 @@ namespace Com.sgagdr.BlackSky
 
         private void PlayVFX(Gun curGunDat, GameObject curWeap)
         {
-            currentWeapon.GetComponentInChildren<VisualEffect>().Play();
+            VisualEffect vfx = currentWeapon.GetComponentInChildren<VisualEffect>();
+            Animation anim = currentWeapon.GetComponentInChildren<Animation>();
+
+            if (vfx) vfx.Play();
+            if (anim) anim.Play();
+
         }
 
         #endregion
@@ -292,10 +327,13 @@ namespace Com.sgagdr.BlackSky
 
         public void RefreshAmmo(Text p_text)
         {
+            int t_clipsize = loadout[currentIndex].clipsize;
             int t_clip = loadout[currentIndex].GetClip();
             int t_stash = loadout[currentIndex].GetStash();
 
             p_text.text = t_clip.ToString("D2") + " / " + t_stash.ToString("D2");
+            if (1f * t_clip / t_clipsize <= 0.25f) p_text.color = Color.red;
+            else p_text.color = Color.black;
         }
 
         #endregion

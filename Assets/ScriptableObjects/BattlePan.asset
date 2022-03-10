@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16f76388550a4846ae2d447a850272c, type: 3}
+  m_Name: BattlePan
+  m_EditorClassIdentifier: 
+  gunName: Big Ben
+  damage: 50
+  prefab: {fileID: 5821635380701155427, guid: a531edea36e432548a332ed506ea6806, type: 3}
+  weaponType: 1
+  missSound: {fileID: 8300000, guid: bab94d57c40c06b49827f04189fe0763, type: 3}
+  hitSound: {fileID: 8300000, guid: 2daa4f9ce43013540ad84af2c4f1dc13, type: 3}
+  pitch: 0.1
+  volume: 0.203

@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba548f07b8e2b5441871138b9b39c9ac, type: 3}
   m_Name: RPK74
   m_EditorClassIdentifier: 
-  type: 1
   gunName: RPK
-  prefab: {fileID: 1336728416877736957, guid: fdd85699fea1a7140a80c381b7bc594b, type: 3}
   damage: 10
+  prefab: {fileID: 1336728416877736957, guid: fdd85699fea1a7140a80c381b7bc594b, type: 3}
+  weaponType: 0
+  ammoType: 1
   ammo: 100
   clipsize: 30
   reload: 2

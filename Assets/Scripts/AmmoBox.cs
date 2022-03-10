@@ -4,11 +4,7 @@ using UnityEngine;
 
 namespace Com.sgagdr.BlackSky
 {
-    public enum typeOfAmmo : int
-    {
-        revolver = 0,
-        rpk = 1
-    }
+
     public class AmmoBox : MonoBehaviour
     {
         //Amount of ammo to add
@@ -31,7 +27,7 @@ namespace Com.sgagdr.BlackSky
                 Gun[] arr = other.gameObject.GetComponent<Weapon>().loadout;
                 foreach (Gun gun in arr)
                 {
-                    if (gun.type == type)
+                    if (gun.ammoType == type)
                     {
                         gun.AddStash(amount);
                         sfx.Play();

@@ -383,8 +383,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7862840662434451403}
-  m_LocalRotation: {x: -0, y: -0.56038696, z: -0, w: -0.828231}
-  m_LocalPosition: {x: 142.18275, y: 40.86, z: 203.68436}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7862840661253512417}
@@ -393,7 +393,7 @@ Transform:
   - {fileID: 666014140968178993}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -291.835, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7862840662434451406
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -517,6 +517,7 @@ MonoBehaviour:
   loadout:
   - {fileID: 11400000, guid: 19532497356e82e41b3472e7d1d0ed0f, type: 2}
   - {fileID: 11400000, guid: 1f1222b26eed90a488c8c9183b2710fa, type: 2}
+  - {fileID: 11400000, guid: 5c16ac070c130514f98b9d48663048e2, type: 2}
   weaponParent: {fileID: 7862840661612877196}
   bulletholePrefab: {fileID: 296612812493044449, guid: f1e1553a3d62e524083a96ff0d26dd68, type: 3}
   canBeShot:
