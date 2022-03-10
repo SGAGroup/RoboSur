@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3510744921592133087, guid: 61b7f5b988420524c979f1ad8a3dc5c0, type: 3}
       propertyPath: m_Name
-      value: RevolverTrail
+      value: RevolverTrail Variant
       objectReference: {fileID: 0}
     - target: {fileID: 5743908503888181710, guid: 61b7f5b988420524c979f1ad8a3dc5c0, type: 3}
       propertyPath: m_RootOrder

@@ -20,7 +20,6 @@ namespace Com.sgagdr.BlackSky
 
         #endregion
 
-
         #region  MonoBehaviour Callbacks
 
         private void Start()

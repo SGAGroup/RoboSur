@@ -10,6 +10,10 @@ public class TrailScript : MonoBehaviour
 
     private float currentTime = 0f;
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        speed = 0f;
+    }
     void Start()
     {
 
@@ -18,10 +22,13 @@ public class TrailScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        do
+
+        transform.localPosition += direction * speed*Time.deltaTime;
+        currentTime += Time.deltaTime;
+
+        if(currentTime > lifeTime)
         {
-            transform.localPosition += direction*speed;
-            currentTime += Time.deltaTime;
-        } while (currentTime < lifeTime);
+            Destroy(gameObject);
+        }
     }
 }

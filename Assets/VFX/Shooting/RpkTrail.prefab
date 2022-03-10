@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5743908503888181710}
   - component: {fileID: 8758318377864491338}
   - component: {fileID: -4178977903067525993}
+  - component: {fileID: 8301536181270019758}
   m_Layer: 0
   m_Name: RpkTrail
   m_TagString: Untagged
@@ -142,6 +143,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee5857dba817e58469171047c5c86f7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2.48
+  speed: 1000
   direction: {x: 0, y: 0, z: 0}
-  lifeTime: 10.11
+  lifeTime: 5
+--- !u!136 &8301536181270019758
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3510744921592133087}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  m_Radius: 0.026287615
+  m_Height: 2.3793454
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.6896727, z: -0.47371238}

@@ -37,6 +37,8 @@ namespace Com.sgagdr.BlackSky
         private Vector3 weaponParentOrigin; //Изначальное положение слота для оружия
         private Vector3 weaponParentCurentPos;
 
+        public bool isAim = false;
+
         //Здоровье
         public int maxHealth;
         private int currentHealth;
@@ -56,6 +58,8 @@ namespace Com.sgagdr.BlackSky
         private float slide_time;
         private Vector3 slide_dir;
 
+
+       
         #endregion
 
         #region  Monobehavior Callbacks
@@ -103,7 +107,7 @@ namespace Com.sgagdr.BlackSky
             //Положения (States)
             bool isGrounded = Physics.Raycast(groundDetector.position, Vector3.down, 0.1f, ground);
             bool isJumping = jump && isGrounded;
-            bool isSprinting = sprint && t_vmove > 0 && !isJumping && isGrounded;
+            bool isSprinting = sprint && t_vmove > 0 && !isJumping && isGrounded && !isAim;
 
             //Прыгаем
             if (isJumping)
@@ -113,7 +117,9 @@ namespace Com.sgagdr.BlackSky
 
 
             //Покачивание головы
-            if (sliding) { }
+            if (sliding || isAim) {
+                weaponParent.localPosition = weaponParentOrigin;
+            }
             else if (t_hmove == 0 && t_vmove == 0)
             {
                 HeadBob(idleCount, 0.025f, 0.025f);
@@ -154,7 +160,7 @@ namespace Com.sgagdr.BlackSky
             //Положения (States)
             bool isGrounded = Physics.Raycast(groundDetector.position, Vector3.down, 0.1f, ground);
             bool isJumping = jump && isGrounded;
-            bool isSprinting = sprint && t_vmove > 0 && !isJumping && isGrounded;
+            bool isSprinting = sprint && t_vmove > 0 && !isJumping && isGrounded && !isAim;
             bool isSliding = isSprinting && slide && !sliding;
 
             //Движение

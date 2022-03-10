@@ -12,6 +12,8 @@ namespace Com.sgagdr.BlackSky
     {
 
         #region Variables
+        private Player player;
+
 
         public Gun[] loadout;
         private Gun currentGunData;
@@ -41,6 +43,7 @@ namespace Com.sgagdr.BlackSky
 
         private void Start()
         {
+            player = gameObject.GetComponent<Player>();
             lastCountOfPlayers = PhotonNetwork.CountOfPlayers;
 
             foreach(Gun a in loadout) a.Initialize();
@@ -152,6 +155,9 @@ namespace Com.sgagdr.BlackSky
 
         void Aim(bool p_isAiming)
         {
+            player.isAim = p_isAiming;
+            Debug.Log("Player is aiming:" + player.isAim);
+
             //Ищет положение определённого объекта, который принадлежит родительскому объекту (род. объект - curentWeapon)
             Transform t_anchor = currentWeapon.transform.Find("Anchor");
             //Ищем положение объекта Aiming (В префабе оружия есть такой)
