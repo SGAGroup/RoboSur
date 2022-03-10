@@ -42,7 +42,7 @@ TrailRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3510744921592133087}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 0
@@ -143,8 +143,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee5857dba817e58469171047c5c86f7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1000
-  direction: {x: 0, y: 0, z: 0}
   finalPoint: {x: 0, y: 0, z: 0}
   lifeTime: 5
 --- !u!136 &8301536181270019758

@@ -15,6 +15,8 @@ namespace Com.sgagdr.BlackSky
     //Сюда можно добавить что душе угодно
     public class Gun : ScriptableObject
     {
+        public typeOfAmmo type;
+
         //Имя пукши
         public string gunName;
         //Модель пукши
@@ -54,6 +56,8 @@ namespace Com.sgagdr.BlackSky
         private int stash; // Текущее кол-во патронов
         private int clip; // Текущее кол-во патронов в магазине 
 
+        //Позиция в списке оружия
+        public int posInLoadOut;
 
         public void Initialize()
         {
@@ -78,8 +82,12 @@ namespace Com.sgagdr.BlackSky
             stash -= clip;
         }
 
+        //Returns a count of ammo in stash
         public int GetStash() {return stash; }
+        //Returns a count of ammo in current clip
         public int GetClip() {return clip; }
+
+        public void AddStash(int val) { stash += val; }
     }
 
     #endregion

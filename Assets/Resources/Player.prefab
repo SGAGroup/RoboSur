@@ -104,7 +104,6 @@ GameObject:
   - component: {fileID: 7862840661885799306}
   - component: {fileID: 7862840661885799305}
   - component: {fileID: 7862840661885799304}
-  - component: {fileID: 7862840661885799307}
   m_Layer: 8
   m_Name: Glasses
   m_TagString: Untagged
@@ -175,19 +174,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7862840661885799307
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7862840661885799301}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7862840662182509600
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,6 +501,7 @@ MonoBehaviour:
   maxHealth: 100
   ui_DmgIndicator: {fileID: 0}
   manager: {fileID: 0}
+  minSpeedToSlide: 2
 --- !u!114 &7862840662434451442
 MonoBehaviour:
   m_ObjectHideFlags: 0

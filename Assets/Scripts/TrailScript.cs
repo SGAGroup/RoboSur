@@ -2,32 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrailScript : MonoBehaviour
+namespace Com.sgagdr.BlackSky
 {
-    public Vector3 finalPoint;
-    public float lifeTime = 4f;
-
-    private float currentTime = 0f;
-
-    void Start()
+    public class TrailScript : MonoBehaviour
     {
-        StartCoroutine(teleport());
-    }
+        public Vector3 finalPoint;
+        public float lifeTime = 4f;
 
-    // Update is called once per frame
-    void Update()
-    {
-        currentTime += Time.deltaTime;
+        private float currentTime = 0f;
 
-        if(currentTime > lifeTime)
+        void Start()
         {
-            Destroy(gameObject);
+            StartCoroutine(teleport());
         }
-    }
-    
-    IEnumerator teleport()
-    {
-        yield return new WaitForSecondsRealtime(0.02f);
-        gameObject.transform.position = finalPoint;
+
+        // Update is called once per frame
+        void Update()
+        {
+            currentTime += Time.deltaTime;
+
+            if (currentTime > lifeTime)
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        IEnumerator teleport()
+        {
+            yield return new WaitForSecondsRealtime(0.02f);
+            gameObject.transform.position = finalPoint;
+        }
     }
 }

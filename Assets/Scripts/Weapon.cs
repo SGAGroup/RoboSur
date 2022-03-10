@@ -37,6 +37,9 @@ namespace Com.sgagdr.BlackSky
         private int equipID = 0;
         private int lastCountOfPlayers = 0;
 
+
+        private bool isAbleToReload = false;
+
         #endregion
 
         #region  MonoBehaviour Callbacks
@@ -46,7 +49,10 @@ namespace Com.sgagdr.BlackSky
             player = gameObject.GetComponent<Player>();
             lastCountOfPlayers = PhotonNetwork.CountOfPlayers;
 
-            foreach(Gun a in loadout) a.Initialize();
+            for (int i = 0; i < loadout.Length; i++)
+            {
+                loadout[i].Initialize();
+            }
             Equip(0);
         }
 
@@ -73,17 +79,27 @@ namespace Com.sgagdr.BlackSky
 
             if (currentWeapon != null)
             {
+                isAbleToReload = (currentGunData.GetStash() > 0);
+
                 //Если нажата ЛКМ, то внутри функции Aim переменная p_isAiming будет равна истине
                 Aim(Input.GetMouseButton(1));
 
 
-                if (Input.GetMouseButton(0) && currentCooldown <= 0)
+                if (Input.GetMouseButton(0) && currentCooldown <= 0 && !isReloading)
                 {
-                    if(loadout[currentIndex].FireBullet()) photonView.RPC("Shoot", RpcTarget.All);
-                    else StartCoroutine(Reload(loadout[currentIndex].reload));
+                    if (loadout[currentIndex].FireBullet()) photonView.RPC("Shoot", RpcTarget.All);
+                    else if (isAbleToReload)
+                    {
+                        StartCoroutine(Reload(loadout[currentIndex].reload));
+                    }
                 }
 
-                if(Input.GetKeyDown(KeyCode.R)) StartCoroutine(Reload(loadout[currentIndex].reload));
+
+                if (Input.GetKeyDown(KeyCode.R) && isAbleToReload)
+                {
+                    currentCooldown = currentGunData.reload - currentGunData.firerate;
+                    StartCoroutine(Reload(loadout[currentIndex].reload));
+                }
 
                 //weapon position elasticity (Ну чтобы тут хранилась позиция пукши, к которой мы можем вернуться, после отдачи например)
                 currentWeapon.transform.localPosition = Vector3.Lerp(currentWeapon.transform.localPosition, Vector3.zero, Time.deltaTime * 4f);
@@ -92,7 +108,7 @@ namespace Com.sgagdr.BlackSky
                 if (currentCooldown > 0) currentCooldown -= Time.deltaTime;
             }
 
-            if(lastCountOfPlayers != PhotonNetwork.CountOfPlayers)
+            if (lastCountOfPlayers != PhotonNetwork.CountOfPlayers)
             {
                 photonView.RPC("Equip", RpcTarget.All, equipID);
                 lastCountOfPlayers = PhotonNetwork.CountOfPlayers;
@@ -102,9 +118,9 @@ namespace Com.sgagdr.BlackSky
         #endregion
 
         #region Photon Callbacks
-            
-            
-            
+
+
+
         #endregion
 
 
@@ -113,22 +129,22 @@ namespace Com.sgagdr.BlackSky
         #region Private Methods
 
         //Когда хотим взять определённое оружие вызываем эту функцию. p_ind номер оружия которое хотим достать
-        
-        IEnumerator Reload (float p_wait)
+
+        IEnumerator Reload(float p_wait)
         {
             //Пошла перезарядка
             isReloading = true;
             currentWeapon.SetActive(false);
-
 
             //SFX
             sfx.Stop();
             sfx.clip = currentGunData.reloadClip;
             sfx.Play();
 
+
             //Ждём её окончания p_wait секунд (yield, кстати корутина)
             yield return new WaitForSeconds(p_wait);
-            
+
             //Заканчиваем перезарядку
             loadout[currentIndex].Reload();
             currentWeapon.SetActive(true);
@@ -138,9 +154,9 @@ namespace Com.sgagdr.BlackSky
         [PunRPC]
         void Equip(int p_ind)
         {
-            if (currentWeapon != null) 
+            if (currentWeapon != null)
             {
-                if(isReloading) StopCoroutine("Reload");
+                if (isReloading) StopCoroutine("Reload");
                 Destroy(currentWeapon);
             }
 
@@ -221,7 +237,7 @@ namespace Com.sgagdr.BlackSky
                 GameObject t_newTrail = Instantiate(currentGunData.trail, currentWeapon.transform.position, Quaternion.identity);
                 t_newTrail.GetComponent<TrailScript>().finalPoint = t_hit.point + t_hit.normal * 0.002f;
 
-                    //Штото с тем, что мы это мы
+                //Штото с тем, что мы это мы
                 if (photonView.IsMine)
                 {
                     //Что-то с тем, что мы попали в игрока
@@ -274,7 +290,7 @@ namespace Com.sgagdr.BlackSky
 
         #region Public Methods
 
-        public void RefreshAmmo (Text p_text)
+        public void RefreshAmmo(Text p_text)
         {
             int t_clip = loadout[currentIndex].GetClip();
             int t_stash = loadout[currentIndex].GetStash();
