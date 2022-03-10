@@ -13,7 +13,9 @@ namespace Com.sgagdr.BlackSky
 
         public float speed;
         public float sprintModifier;
+        public float slideModifier;
         public float jumpForce;
+        public float lengthOfSlide;
         public Camera normalCam;
         public GameObject cameraParent;
         public Transform groundDetector;
@@ -23,14 +25,17 @@ namespace Com.sgagdr.BlackSky
 
         private float baseFOV;
         private float sprintFOVModifier = 1.4f;
+        private Vector3 origin; //Хранит позицию камеры
 
 
         //Покачивание головы
         public Transform weaponParent; //Положение слота для оружия, используется для покачивания камеры
         private float idleCount = 0f; //Счетчик покачивания камеры для состояния стоя
         private float movementCount = 0f; //Счетчик покачивания камеры для движения
-        private Vector3 weaponParentOrigin; //Изначальное положение слота для оружия
+
         private Vector3 targetHeadBobPos; //Положение, которое он должен занять
+        private Vector3 weaponParentOrigin; //Изначальное положение слота для оружия
+        private Vector3 weaponParentCurentPos;
 
         //Здоровье
         public int maxHealth;
@@ -45,6 +50,12 @@ namespace Com.sgagdr.BlackSky
         public Manager manager;
         private Weapon weapon;
 
+
+        //Подскальзываемся
+        private bool sliding;
+        private float slide_time;
+        private Vector3 slide_dir;
+
         #endregion
 
         #region  Monobehavior Callbacks
@@ -56,11 +67,15 @@ namespace Com.sgagdr.BlackSky
             currentHealth = maxHealth;
             if (photonView.IsMine) cameraParent.SetActive(true);
             if (!photonView.IsMine) gameObject.layer = 10;//10 - Player, что позволяет оружию наносить им урон
+
             baseFOV = normalCam.fieldOfView;
             //Включить если в сцене больше чем одна камера
             //if(Camera.main) Camera.main.enabled = false;
+            origin = normalCam.transform.localPosition;
+
             rig = GetComponent<Rigidbody>();
             weaponParentOrigin = weaponParent.localPosition;
+            weaponParentCurentPos = weaponParentOrigin;
 
             if (photonView.IsMine)
             {
@@ -98,7 +113,8 @@ namespace Com.sgagdr.BlackSky
 
 
             //Покачивание головы
-            if (t_hmove == 0 && t_vmove == 0)
+            if (sliding) { }
+            else if (t_hmove == 0 && t_vmove == 0)
             {
                 HeadBob(idleCount, 0.025f, 0.025f);
                 idleCount += Time.deltaTime;
@@ -123,7 +139,7 @@ namespace Com.sgagdr.BlackSky
 
         }
 
-        void FixedUpdate()
+        async void FixedUpdate()
         {
             if (!photonView.IsMine) return;
             //Впитываем оси
@@ -133,27 +149,69 @@ namespace Com.sgagdr.BlackSky
             //Впитываем кнопки
             bool sprint = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
             bool jump = Input.GetKeyDown(KeyCode.Space);
+            bool slide = Input.GetKey(KeyCode.LeftControl);
 
             //Положения (States)
             bool isGrounded = Physics.Raycast(groundDetector.position, Vector3.down, 0.1f, ground);
             bool isJumping = jump && isGrounded;
             bool isSprinting = sprint && t_vmove > 0 && !isJumping && isGrounded;
+            bool isSliding = isSprinting && slide && !sliding;
 
             //Движение
-            Vector3 t_direction = new Vector3(t_hmove, 0, t_vmove);
-            t_direction.Normalize();
-
+            Vector3 t_direction = Vector3.zero;
             float t_adjustedSpeed = speed;
-            if (isSprinting) t_adjustedSpeed *= sprintModifier;
 
-            Vector3 t_targetVelocity = transform.TransformDirection(t_direction) * t_adjustedSpeed * Time.deltaTime;
+            if(!sliding)
+            {
+                t_direction = new Vector3(t_hmove, 0, t_vmove);
+                t_direction.Normalize();
+                t_direction = transform.TransformDirection(t_direction);
+
+                if (isSprinting) t_adjustedSpeed *= sprintModifier;
+            }
+            else
+            {
+                t_direction = slide_dir;
+                t_adjustedSpeed *= slideModifier;
+                slide_time -= Time.deltaTime;
+                if(slide_time <= 0)
+                {
+                    sliding = false;
+                    weaponParentCurentPos += Vector3.up * 0.5f;
+                }
+            }
+
+
+            Vector3 t_targetVelocity = t_direction * t_adjustedSpeed * Time.deltaTime;
             t_targetVelocity.y = rig.velocity.y;
             rig.velocity = t_targetVelocity;
 
 
-            //FOV при беге и ходьбе
-            if (isSprinting) { normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV * sprintFOVModifier, Time.deltaTime * 8f); }
-            else { normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV, Time.deltaTime * 8f); }
+            //Подскальзываемся (Sliding)
+            if(isSliding)
+            {
+                sliding = true;
+                slide_dir = t_direction;
+                slide_time = lengthOfSlide;
+
+                //Опустим камеру
+                weaponParentCurentPos += Vector3.down * 0.5f;
+            }
+
+
+            //Шайтан курум преколы с камерой
+            if(sliding)
+            {
+                normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV * sprintFOVModifier * 1.1f, Time.deltaTime * 8f);
+                normalCam.transform.localPosition = Vector3.Lerp(normalCam.transform.localPosition, origin + Vector3.down * 0.5f, Time.deltaTime * 6f);
+            }
+            else
+            {
+                if (isSprinting) { normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV * sprintFOVModifier, Time.deltaTime * 8f); }
+                else { normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV, Time.deltaTime * 8f); }
+
+                normalCam.transform.localPosition = Vector3.Lerp(normalCam.transform.localPosition, origin, Time.deltaTime * 6f);
+            }
         }
 
         #endregion

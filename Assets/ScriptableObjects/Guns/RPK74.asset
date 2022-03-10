@@ -17,6 +17,7 @@ MonoBehaviour:
   damage: 10
   ammo: 100
   clipsize: 30
+  reload: 7
   bloom: 15.2
   recoil: 9.96
   kickback: 0.19

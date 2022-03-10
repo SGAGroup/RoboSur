@@ -501,7 +501,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 500
   sprintModifier: 2
+  slideModifier: 2.5
   jumpForce: 300
+  lengthOfSlide: 1.5
   normalCam: {fileID: 7862840662182509606}
   cameraParent: {fileID: 7862840662681223457}
   groundDetector: {fileID: 7862840662700908100}
