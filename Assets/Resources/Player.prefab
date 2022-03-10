@@ -511,6 +511,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   weaponParent: {fileID: 7862840661612877196}
+  isAim: 0
   maxHealth: 100
   ui_DmgIndicator: {fileID: 0}
   manager: {fileID: 0}

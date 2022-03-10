@@ -17,13 +17,14 @@ MonoBehaviour:
   damage: 10
   ammo: 100
   clipsize: 30
-  reload: 1
+  reload: 2
   bloom: 15.2
   recoil: 9.96
   kickback: 0.19
   firerate: 0.1
   aimSpeed: 6
   shotClip: {fileID: 8300000, guid: 41ba578eccf33de48a79d41f1c2f2423, type: 3}
+  reloadClip: {fileID: 8300000, guid: 593a62a8aa51bb04d818339a8cab033b, type: 3}
   pitchRand: 0.1
   clipVolume: 2
   shotEffect: {fileID: 8926484042661614526, guid: 57e1f1cc34e3c794f964ad6f54a1cbde, type: 3}

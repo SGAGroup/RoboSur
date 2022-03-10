@@ -128,7 +128,7 @@ TrailRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 0.28
+  m_MinVertexDistance: 0
   m_Autodestruct: 0
   m_Emitting: 1
 --- !u!114 &-4178977903067525993
@@ -145,6 +145,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1000
   direction: {x: 0, y: 0, z: 0}
+  finalPoint: {x: 0, y: 0, z: 0}
   lifeTime: 5
 --- !u!136 &8301536181270019758
 CapsuleCollider:

@@ -57,6 +57,7 @@ namespace Com.sgagdr.BlackSky
         private bool sliding;
         private float slide_time;
         private Vector3 slide_dir;
+        public float minSpeedToSlide = 2f;
 
 
        
@@ -180,7 +181,7 @@ namespace Com.sgagdr.BlackSky
                 t_direction = slide_dir;
                 t_adjustedSpeed *= slideModifier;
                 slide_time -= Time.deltaTime;
-                if(slide_time <= 0)
+                if(slide_time <= 0 || !slide)
                 {
                     sliding = false;
                     weaponParentCurentPos += Vector3.up * 0.5f;
@@ -191,6 +192,9 @@ namespace Com.sgagdr.BlackSky
             Vector3 t_targetVelocity = t_direction * t_adjustedSpeed * Time.deltaTime;
             t_targetVelocity.y = rig.velocity.y;
             rig.velocity = t_targetVelocity;
+
+            float xzVelocity = Mathf.Sqrt(rig.velocity.x * rig.velocity.x + rig.velocity.z * rig.velocity.z);
+            Debug.Log(xzVelocity);
 
 
             //Подскальзываемся (Sliding)

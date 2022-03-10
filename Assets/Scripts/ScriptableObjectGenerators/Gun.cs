@@ -38,17 +38,22 @@ namespace Com.sgagdr.BlackSky
         //Скорость прицеливания
         public float aimSpeed;
 
+        [Header("Audio Settings")]
         public AudioClip shotClip;
+        public AudioClip reloadClip;
         public float pitchRand;
-        [Range(0f, 2f)]
-        public float clipVolume; 
+        [Range(0f, 1f)]
+        public float clipVolume;
 
-        private int stash; // Текущее кол-во патронов
-        private int clip; // Текущее кол-во патронов в магазине 
 
         [Header("Visual Settings")]
         public VisualEffectAsset shotEffect;
         public GameObject trail;
+        
+        
+        private int stash; // Текущее кол-во патронов
+        private int clip; // Текущее кол-во патронов в магазине 
+
 
         public void Initialize()
         {

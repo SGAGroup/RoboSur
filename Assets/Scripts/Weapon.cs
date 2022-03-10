@@ -120,6 +120,12 @@ namespace Com.sgagdr.BlackSky
             isReloading = true;
             currentWeapon.SetActive(false);
 
+
+            //SFX
+            sfx.Stop();
+            sfx.clip = currentGunData.reloadClip;
+            sfx.Play();
+
             //Ждём её окончания p_wait секунд (yield, кстати корутина)
             yield return new WaitForSeconds(p_wait);
             
@@ -213,7 +219,7 @@ namespace Com.sgagdr.BlackSky
                 Destroy(t_newHole, bulletholeDuration);
 
                 GameObject t_newTrail = Instantiate(currentGunData.trail, currentWeapon.transform.position, Quaternion.identity);
-                t_newTrail.GetComponent<TrailScript>().direction = t_bloom;
+                t_newTrail.GetComponent<TrailScript>().finalPoint = t_hit.point + t_hit.normal * 0.002f;
 
                     //Штото с тем, что мы это мы
                 if (photonView.IsMine)
