@@ -4,25 +4,25 @@ using UnityEngine;
 
 namespace Com.sgagdr.BlackSky
 {
-    public class AmmoSpawner : MonoBehaviour
+    public class ItemSpawner : MonoBehaviour
     {
         //Place for spawn
         public Transform spawn;
         //Time for next spawn
         public float cooldown;
         //Array of boxes for spawn
-        public GameObject[] boxes;
+        public GameObject box;
         //Choose type for spawn
-        public typeOfAmmo typeOfBox;
+        //public typeOfAmmo typeOfBox;
         //Variable says is cube already spawned
         public bool isSpawned = false;
 
-        private GameObject box;
+        //private GameObject box;
 
         void Start()
         {
-            box = boxes[(int)typeOfBox];
-            box.GetComponent<AmmoBox>().spawner = this;
+            //box = boxes[(int)typeOfBox];
+            box.GetComponent<PickableItem>().spawner = this;
         }
 
         void Update()

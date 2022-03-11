@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8944008781139883677}
-  - component: {fileID: 1783035362897546798}
+  - component: {fileID: 3618420527779383441}
   m_Layer: 0
   m_Name: AmmoSpawn
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1783035362897546798
+--- !u!114 &3618420527779383441
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,10 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawn: {fileID: 3618420527438446288}
   cooldown: 5
-  boxes:
-  - {fileID: 1366819169122068279, guid: b3a2aec9912d9b341b3537028c681152, type: 3}
-  - {fileID: 5118874664763206650, guid: 92d538d66537742429c8186da1cd5a93, type: 3}
-  typeOfBox: 1
+  box: {fileID: 1366819169122068279, guid: b3a2aec9912d9b341b3537028c681152, type: 3}
   isSpawned: 0
 --- !u!1 &3618420527438446291
 GameObject:

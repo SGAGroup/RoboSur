@@ -74,7 +74,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 1.63
+  m_Time: 0.19
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   finalPoint: {x: 0, y: 0, z: 0}
-  lifeTime: 5
+  lifeTime: 0.9
 --- !u!136 &8301536181270019758
 CapsuleCollider:
   m_ObjectHideFlags: 0

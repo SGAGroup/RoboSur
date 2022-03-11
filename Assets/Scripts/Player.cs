@@ -277,6 +277,19 @@ namespace Com.sgagdr.BlackSky
             }
         }
 
+        public void AddHealth(int p_health)
+        {
+            if (photonView.IsMine)
+            {
+                currentHealth += p_health;
+                if(currentHealth > maxHealth)
+                {
+                    currentHealth = maxHealth;
+                }
+                UpdateHealthbar();
+            }
+        }
+
 
         #endregion
 
