@@ -21780,6 +21780,10 @@ PrefabInstance:
       propertyPath: box
       value: 
       objectReference: {fileID: 5118874664763206650, guid: 92d538d66537742429c8186da1cd5a93, type: 3}
+    - target: {fileID: 5906741498622241199, guid: 61153659bda84894e89ed62cea4a3b63, type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8944008781139883677, guid: 61153659bda84894e89ed62cea4a3b63, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -23511,7 +23515,7 @@ MonoBehaviour:
   - {fileID: 1245120764}
   - {fileID: 1417112473}
   - {fileID: 1723024266}
-  playerInfo: []
+  myind: 0
 --- !u!4 &1468512991
 Transform:
   m_ObjectHideFlags: 0
@@ -23692,6 +23696,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 536342635}
     m_Modifications:
+    - target: {fileID: 3954432126252128027, guid: 051e35d5f115fb5448a7498cbd07dc98, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3954432126252128027, guid: 051e35d5f115fb5448a7498cbd07dc98, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3954432126252128027, guid: 051e35d5f115fb5448a7498cbd07dc98, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4473931877557994041, guid: 051e35d5f115fb5448a7498cbd07dc98, type: 3}
       propertyPath: m_Name
       value: HUD
@@ -23780,6 +23796,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8079897518645277247, guid: 051e35d5f115fb5448a7498cbd07dc98, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079897518645277247, guid: 051e35d5f115fb5448a7498cbd07dc98, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079897518645277247, guid: 051e35d5f115fb5448a7498cbd07dc98, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 051e35d5f115fb5448a7498cbd07dc98, type: 3}
 --- !u!224 &1647398903 stripped
@@ -23802,6 +23830,10 @@ PrefabInstance:
       propertyPath: box
       value: 
       objectReference: {fileID: 2388277634734941456, guid: 10b2e928930b54b42933bf5c95104d18, type: 3}
+    - target: {fileID: 5906741498622241199, guid: 61153659bda84894e89ed62cea4a3b63, type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8944008781139883677, guid: 61153659bda84894e89ed62cea4a3b63, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -24088,6 +24120,10 @@ PrefabInstance:
     - target: {fileID: 3480838706837279420, guid: 61153659bda84894e89ed62cea4a3b63, type: 3}
       propertyPath: m_Name
       value: RevolverSpawn
+      objectReference: {fileID: 0}
+    - target: {fileID: 5906741498622241199, guid: 61153659bda84894e89ed62cea4a3b63, type: 3}
+      propertyPath: sceneViewId
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8944008781139883677, guid: 61153659bda84894e89ed62cea4a3b63, type: 3}
       propertyPath: m_RootOrder

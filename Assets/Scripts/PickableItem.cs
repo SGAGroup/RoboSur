@@ -1,23 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 
 namespace Com.sgagdr.BlackSky
 {
-    public class PickableItem : MonoBehaviour
+    public class PickableItem : MonoBehaviourPun
     {
         //Parent of box
         public ItemSpawner spawner;
-        public AudioSource sfx;
-        private void Start()
-        {
-            sfx.Stop();
-        }
+        public AudioClip audioClip;
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("Collision Enter!");
-            Debug.Log(other.gameObject.layer);
+            
             if (other.gameObject.layer == 8)
             {
                 Action(other.gameObject);
@@ -25,13 +21,14 @@ namespace Com.sgagdr.BlackSky
         }
         virtual public void Action(GameObject other)
         {
-            Debug.Log("Picked an item!");
+            
+            PlaySound(spawner.sfx);
+            spawner.photonView.RPC("Disable", RpcTarget.All);
         }
-        public IEnumerator DestroyObj()
+        virtual public void PlaySound(AudioSource audio)
         {
-            yield return new WaitForSecondsRealtime(0.1f);
-            spawner.isSpawned = false;
-            Destroy(gameObject);
+            audio.clip = audioClip;
+            audio.Play();
         }
     }
 }

@@ -7,7 +7,7 @@ using TMPro;
 
 namespace Com.sgagdr.BlackSky
 {
-    public class Player : MonoBehaviourPun
+    public class Player : MonoBehaviourPunCallbacks
     {
 
         #region  Variables
@@ -102,6 +102,15 @@ namespace Com.sgagdr.BlackSky
             }
         }
 
+        public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+        {
+            base.OnPlayerLeftRoom(otherPlayer);
+
+            int t_actor = otherPlayer.ActorNumber;
+            Debug.LogWarning($"Player is going to leave! His index: {t_actor}");
+            manager.PlayerDisconnected_S(t_actor);
+            
+        }
 
 
         private void Update()
@@ -206,8 +215,8 @@ namespace Com.sgagdr.BlackSky
             t_targetVelocity.y = rig.velocity.y;
             rig.velocity = t_targetVelocity;
 
-            float xzVelocity = Mathf.Sqrt(rig.velocity.x * rig.velocity.x + rig.velocity.z * rig.velocity.z);
-            Debug.Log(xzVelocity);
+            //float xzVelocity = Mathf.Sqrt(rig.velocity.x * rig.velocity.x + rig.velocity.z * rig.velocity.z);
+            //Debug.Log(xzVelocity);
 
 
             //Подскальзываемся (Sliding)
@@ -321,6 +330,14 @@ namespace Com.sgagdr.BlackSky
             }
         }
 
+        [PunRPC]
+
+        private void Destroy(int p_id)
+        {
+            List<PlayerInfo> newList = manager.playerInfo;
+            newList.RemoveAt(p_id);
+            manager.UpdatePlayers_S(newList);
+        }
         #endregion
 
     }

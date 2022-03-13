@@ -1,43 +1,65 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 namespace Com.sgagdr.BlackSky
 {
-    public class ItemSpawner : MonoBehaviour
+    public class ItemSpawner : MonoBehaviourPun
     {
-        //Place for spawn
+        
         public Transform spawn;
-        //Time for next spawn
         public float cooldown;
-        //Array of boxes for spawn
+        private float t_cd; 
         public GameObject box;
-        //Choose type for spawn
-        //public typeOfAmmo typeOfBox;
-        //Variable says is cube already spawned
-        public bool isSpawned = false;
+        public bool isEnabled = true;
 
-        //private GameObject box;
+        public AudioSource sfx;
+
+        [SerializeField]
+        private GameObject spawnedBox;
+        
 
         void Start()
         {
             //box = boxes[(int)typeOfBox];
             box.GetComponent<PickableItem>().spawner = this;
+            t_cd = cooldown;
+            Spawn();
         }
 
         void Update()
         {
-            if (!isSpawned)
+            if (!isEnabled)
             {
-                StartCoroutine(Spawn());
+                if (t_cd > 0)
+                {
+                    t_cd -= Time.deltaTime;
+                }
+                else { Enable();
+                }
             }
         }
 
-        IEnumerator Spawn()
+       
+        [PunRPC]
+        public void Disable()
         {
-            isSpawned = true;
-            yield return new WaitForSecondsRealtime(cooldown);
-            Instantiate(box, spawn);
+            isEnabled = false;
+            t_cd = cooldown;
+            spawnedBox.SetActive(false);
+        }
+
+        public void Enable()
+        {
+            isEnabled = true;
+            spawnedBox.SetActive(true);
+        }
+
+        void Spawn()
+        {
+            isEnabled = true;
+            spawnedBox = Instantiate(box, spawn);
         }
     }
 }

@@ -12,8 +12,8 @@ namespace Com.sgagdr.BlackSky
         override public void Action(GameObject other)
         {
             other.GetComponent<Player>().AddHealth(health);
-            sfx.Play();
-            StartCoroutine(DestroyObj());
+          
+            base.Action(other);
         }
     }
 }

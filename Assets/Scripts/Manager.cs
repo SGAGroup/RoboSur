@@ -43,7 +43,8 @@ namespace Com.sgagdr.BlackSky
         {
             NewPlayer,
             UpdatePlayers,
-            ChangeStat
+            ChangeStat,
+            PlayerDisconnected
         }
 
         #region MonoBehaviour Callbacks
@@ -73,6 +74,7 @@ namespace Com.sgagdr.BlackSky
         private void OnDisable()
         {
             PhotonNetwork.RemoveCallbackTarget(this);
+            //PlayerDisconnected_S(myind);
         }
 
         #endregion
@@ -86,6 +88,7 @@ namespace Com.sgagdr.BlackSky
 
         private void ValidateConnection()
         {
+
             if (PhotonNetwork.IsConnected) return;
             SceneManager.LoadScene(1);
         }
@@ -118,8 +121,8 @@ namespace Com.sgagdr.BlackSky
 
         private void Leaderboard(Transform p_leaderboard)
         {
-            
-            for(int i = 2; i < p_leaderboard.childCount; i++)
+
+            for (int i = 2; i < p_leaderboard.childCount; i++)
             {
                 Destroy(p_leaderboard.GetChild(i).gameObject);
             }
@@ -189,7 +192,7 @@ namespace Com.sgagdr.BlackSky
             if (photonEvent.Code >= 200) return;
             EventCodes e = (EventCodes)photonEvent.Code;
             object[] o = (object[])photonEvent.CustomData;
-            
+
             Debug.Log($"New event, code = {photonEvent.Code}");
             Debug.Log(photonEvent);
 
@@ -203,6 +206,9 @@ namespace Com.sgagdr.BlackSky
                     break;
                 case EventCodes.ChangeStat:
                     ChangeStat_R(o);
+                    break;
+                case EventCodes.PlayerDisconnected:
+                    PlayerDisconnected_R(o);
                     break;
             }
 
@@ -234,12 +240,12 @@ namespace Com.sgagdr.BlackSky
         {
             PlayerInfo p = new PlayerInfo(
                 new ProfileData(
-                    (string) data[0],
-                    (int) data[1],
-                    (int) data[2]),
-                (int) data[3],
-                (int) data[4],
-                (int) data[5]
+                    (string)data[0],
+                    (int)data[1],
+                    (int)data[2]),
+                (int)data[3],
+                (int)data[4],
+                (int)data[5]
             );
 
             playerInfo.Add(p);
@@ -279,16 +285,16 @@ namespace Com.sgagdr.BlackSky
 
             for (int i = 0; i < data.Length; i++)
             {
-                object[] extract = (object[]) data[i];
+                object[] extract = (object[])data[i];
 
                 PlayerInfo p = new PlayerInfo(
                 new ProfileData(
-                    (string) extract[0],
-                    (int) extract[1],
-                    (int) extract[2]),
-                (int) extract[3],
-                (int) extract[4],
-                (int) extract[5]
+                    (string)extract[0],
+                    (int)extract[1],
+                    (int)extract[2]),
+                (int)extract[3],
+                (int)extract[4],
+                (int)extract[5]
                 );
 
                 playerInfo.Add(p);
@@ -339,6 +345,34 @@ namespace Com.sgagdr.BlackSky
                     return;
                 }
             }
+        }
+        public void PlayerDisconnected_S(int id)
+        {
+            object[] package = new object[] { id };
+
+            PhotonNetwork.RaiseEvent(
+                (byte)EventCodes.PlayerDisconnected,
+                package,
+                new RaiseEventOptions { Receivers = ReceiverGroup.All },
+                new SendOptions { Reliability = true }
+                );
+        }
+
+        public void PlayerDisconnected_R(object[] data)
+        {
+            int id = (int)data[0];
+
+            for (int i = 0; i < playerInfo.Count; i++)
+            {
+                if (playerInfo[i].id == id)
+                {
+                    Debug.LogWarning($"Found player with id(actor number): {id}, His name: {playerInfo[i].profile.username}");
+                    playerInfo.RemoveAt(i);
+                }
+            }
+
+
+            UpdatePlayers_S(playerInfo);
         }
 
         #endregion

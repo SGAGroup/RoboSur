@@ -78,7 +78,7 @@ namespace Com.sgagdr.BlackSky
 
             if (Input.GetKeyDown(KeyCode.P))
             {
-                photonView.RPC("TakeDamage", RpcTarget.All, 20);
+                photonView.RPC("TakeDamage", RpcTarget.All, 20, -1);
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -99,7 +99,7 @@ namespace Com.sgagdr.BlackSky
 
             if (currentWeapon != null)
             {
-                isAbleToReload = (currentGunData.GetStash() > 0 && currentGunData.weaponType == typeOfWeapon.Gun);
+                isAbleToReload = (currentGunData.GetStash() > 0 && currentGunData.GetClip() < currentGunData.clipsize && currentGunData.weaponType == typeOfWeapon.Gun);
 
                 //Если нажата ЛКМ, то внутри функции Aim переменная p_isAiming будет равна истине
                 Aim(Input.GetMouseButton(1));
@@ -125,7 +125,7 @@ namespace Com.sgagdr.BlackSky
 
                 if (Input.GetKeyDown(KeyCode.R) && isAbleToReload)
                 {
-                    currentCooldown = currentGunData.reload - currentGunData.firerate;
+                    //currentCooldown = currentGunData.reload - currentGunData.firerate;
                     StartCoroutine(Reload(loadout[currentIndex].reload));
                 }
 
@@ -206,7 +206,7 @@ namespace Com.sgagdr.BlackSky
         void Aim(bool p_isAiming)
         {
             player.isAim = p_isAiming;
-            Debug.Log("Player is aiming:" + player.isAim);
+            //Debug.Log("Player is aiming:" + player.isAim);
 
             //Ищет положение определённого объекта, который принадлежит родительскому объекту (род. объект - curentWeapon)
             Transform t_anchor = currentWeapon.transform.Find("Anchor");
