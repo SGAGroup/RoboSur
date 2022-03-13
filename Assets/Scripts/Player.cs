@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 namespace Com.sgagdr.BlackSky
 {
@@ -10,6 +11,9 @@ namespace Com.sgagdr.BlackSky
     {
 
         #region  Variables
+        public ProfileData playerProfile;
+        public bool isNeedToDisplayName = false;
+        public TextMeshPro playerUsername;
 
         public float speed;
         public float sprintModifier;
@@ -46,6 +50,7 @@ namespace Com.sgagdr.BlackSky
         //Hud
         private Transform ui_HealthBar;
         private Text ui_ammo;
+        private Text ui_username;
         public GameObject ui_DmgIndicator;
         private float indicatorBlinkTime = 0.25f;
 
@@ -60,7 +65,7 @@ namespace Com.sgagdr.BlackSky
         public float minSpeedToSlide = 2f;
 
 
-       
+
         #endregion
 
         #region  Monobehavior Callbacks
@@ -86,11 +91,18 @@ namespace Com.sgagdr.BlackSky
             {
                 ui_HealthBar = GameObject.Find("HUD/Health/HP").transform;
                 ui_ammo = GameObject.Find("HUD/Ammo/AmmoText").GetComponent<Text>();
+                ui_username = GameObject.Find("HUD/Username/Text").GetComponent<Text>();
                 ui_DmgIndicator = GameObject.Find("HUD/DmgIndicator");
                 ui_DmgIndicator.SetActive(false);
                 UpdateHealthbar();
+
+                ui_username.text = Launcher.myProfile.username;
+
+                photonView.RPC("SyncProfile", RpcTarget.All, Launcher.myProfile.username, Launcher.myProfile.level, Launcher.myProfile.xp);
             }
         }
+
+
 
         private void Update()
         {
@@ -118,7 +130,8 @@ namespace Com.sgagdr.BlackSky
 
 
             //Покачивание головы
-            if (sliding || isAim) {
+            if (sliding || isAim)
+            {
                 weaponParent.localPosition = weaponParentOrigin;
             }
             else if (t_hmove == 0 && t_vmove == 0)
@@ -168,7 +181,7 @@ namespace Com.sgagdr.BlackSky
             Vector3 t_direction = Vector3.zero;
             float t_adjustedSpeed = speed;
 
-            if(!sliding)
+            if (!sliding)
             {
                 t_direction = new Vector3(t_hmove, 0, t_vmove);
                 t_direction.Normalize();
@@ -181,7 +194,7 @@ namespace Com.sgagdr.BlackSky
                 t_direction = slide_dir;
                 t_adjustedSpeed *= slideModifier;
                 slide_time -= Time.deltaTime;
-                if(slide_time <= 0 || !slide)
+                if (slide_time <= 0 || !slide)
                 {
                     sliding = false;
                     weaponParentCurentPos += Vector3.up * 0.5f;
@@ -198,7 +211,7 @@ namespace Com.sgagdr.BlackSky
 
 
             //Подскальзываемся (Sliding)
-            if(isSliding)
+            if (isSliding)
             {
                 sliding = true;
                 slide_dir = t_direction;
@@ -210,7 +223,7 @@ namespace Com.sgagdr.BlackSky
 
 
             //Шайтан курум преколы с камерой
-            if(sliding)
+            if (sliding)
             {
                 normalCam.fieldOfView = Mathf.Lerp(normalCam.fieldOfView, baseFOV * sprintFOVModifier * 1.1f, Time.deltaTime * 8f);
                 normalCam.transform.localPosition = Vector3.Lerp(normalCam.transform.localPosition, origin + Vector3.down * 0.5f, Time.deltaTime * 6f);
@@ -239,27 +252,28 @@ namespace Com.sgagdr.BlackSky
         {
             Debug.Log("You died!");
             manager.Spawn();
+            manager.ChangeStat_S(PhotonNetwork.LocalPlayer.ActorNumber, 1, 1); //Stat 1 - death
             PhotonNetwork.Destroy(gameObject);
         }
 
         private void UpdateHealthbar()
         {
-            float healthRatio = 1f*currentHealth / maxHealth;
-            ui_HealthBar.localScale = new Vector3(healthRatio,1f,1f);
+            float healthRatio = 1f * currentHealth / maxHealth;
+            ui_HealthBar.localScale = new Vector3(healthRatio, 1f, 1f);
         }
 
         private IEnumerator ShowDmgIndicator()
         {
-            yield return new WaitForSecondsRealtime(indicatorBlinkTime);   
+            yield return new WaitForSecondsRealtime(indicatorBlinkTime);
             ui_DmgIndicator.SetActive(false);
-            
+
         }
 
         #endregion
 
         #region Public Methods
 
-        public void TakeDamage(int p_damage)
+        public void TakeDamage(int p_damage, int p_id = -1)
         {
             if (photonView.IsMine)
             {
@@ -272,6 +286,10 @@ namespace Com.sgagdr.BlackSky
                 if (currentHealth <= 0)
                 {
                     Die();
+                    if (p_id >= 0)
+                    {
+                        manager.ChangeStat_S(p_id, 0, 1); // stat 0 - kills
+                    }
                 }
 
             }
@@ -282,14 +300,26 @@ namespace Com.sgagdr.BlackSky
             if (photonView.IsMine)
             {
                 currentHealth += p_health;
-                if(currentHealth > maxHealth)
+                if (currentHealth > maxHealth)
                 {
                     currentHealth = maxHealth;
                 }
                 UpdateHealthbar();
             }
         }
-
+        [PunRPC]
+        private void SyncProfile(string p_username, int p_level, int p_xp)
+        {
+            playerProfile = new ProfileData(p_username, p_xp, p_level);
+            if (isNeedToDisplayName)
+            {
+                playerUsername.text = playerProfile.username;
+            }
+            else
+            {
+                playerUsername.gameObject.SetActive(false);
+            }
+        }
 
         #endregion
 

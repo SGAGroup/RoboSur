@@ -21,8 +21,8 @@ MonoBehaviour:
   clipsize: 30
   reload: 2
   bloom: 15.2
-  recoil: 9.96
-  kickback: 0.19
+  recoil: 0.05
+  kickback: 0.45
   firerate: 0.1
   aimSpeed: 6
   shotClip: {fileID: 8300000, guid: 41ba578eccf33de48a79d41f1c2f2423, type: 3}

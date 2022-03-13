@@ -260,7 +260,10 @@ namespace Com.sgagdr.BlackSky
                     t_newHole.transform.LookAt(t_hit.point + t_hit.normal);
                     Destroy(t_newHole, bulletholeDuration);
 
-                    GameObject t_newTrail = Instantiate(currentGunData.trail, currentWeapon.transform.position, Quaternion.identity);
+                    
+                    Transform t_barell = currentWeapon.GetComponentInChildren<VisualEffect>().gameObject.transform;
+                    if (!t_barell) t_barell = currentWeapon.transform;
+                    GameObject t_newTrail = Instantiate(currentGunData.trail, t_barell.position, Quaternion.identity);
                     t_newTrail.GetComponent<TrailScript>().finalPoint = t_hit.point + t_hit.normal * 0.002f;
 
                     //Штото с тем, что мы это мы
@@ -272,7 +275,7 @@ namespace Com.sgagdr.BlackSky
                             //А тут должен быть эффект от урона
                             //И теперь тут есть урон
                             //Наносим урон равный урону текущего оружия, сообщаем всем
-                            t_hit.collider.gameObject.GetPhotonView().RPC("TakeDamage", RpcTarget.All, loadout[currentIndex].damage);
+                            t_hit.collider.gameObject.GetPhotonView().RPC("TakeDamage", RpcTarget.All, loadout[currentIndex].damage, PhotonNetwork.LocalPlayer.ActorNumber);
                         }
                         //Отдача по вертикали
                         currentWeapon.transform.Rotate(-loadout[currentIndex].recoil, 0, 0);
@@ -299,7 +302,9 @@ namespace Com.sgagdr.BlackSky
         [PunRPC]
         private void TakeDamage(int p_damage)
         {
-            GetComponent<Player>().TakeDamage(p_damage);
+            //TODO:
+            Player pl = GetComponent<Player>();
+            pl.TakeDamage(p_damage, pl.manager.myind);
         }
 
         private void PlaySFX(Gun curGunDat)
@@ -333,7 +338,7 @@ namespace Com.sgagdr.BlackSky
 
             p_text.text = t_clip.ToString("D2") + " / " + t_stash.ToString("D2");
             if (1f * t_clip / t_clipsize <= 0.25f) p_text.color = Color.red;
-            else p_text.color = Color.black;
+            else p_text.color = Color.white;
         }
 
         #endregion

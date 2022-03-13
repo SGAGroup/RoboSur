@@ -19,7 +19,7 @@ namespace Com.sgagdr.BlackSky
 
         private void OnTriggerEnter(Collider other)
         {
-            other.gameObject.GetComponent<Player>().TakeDamage(damage);
+            other.gameObject.GetComponent<Player>().TakeDamage(damage, -1);
         }
     }
 }
