@@ -300,11 +300,11 @@ namespace Com.sgagdr.BlackSky
         }
 
         [PunRPC]
-        private void TakeDamage(int p_damage)
+        private void TakeDamage(int p_damage, int p_ind)
         {
             //TODO:
             Player pl = GetComponent<Player>();
-            pl.TakeDamage(p_damage, pl.manager.myind);
+            pl.TakeDamage(p_damage, p_ind);
         }
 
         private void PlaySFX(Gun curGunDat)
