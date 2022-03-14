@@ -109,7 +109,7 @@ namespace Com.sgagdr.BlackSky
             int t_actor = otherPlayer.ActorNumber;
             Debug.LogWarning($"Player is going to leave! His index: {t_actor}");
             manager.PlayerDisconnected_S(t_actor);
-            
+
         }
 
 
@@ -337,6 +337,15 @@ namespace Com.sgagdr.BlackSky
             List<PlayerInfo> newList = manager.playerInfo;
             newList.RemoveAt(p_id);
             manager.UpdatePlayers_S(newList);
+        }
+
+        [PunRPC]
+        void GetForce(Vector3 force)
+        {
+            if (photonView.IsMine)
+            {
+                rig.AddForce(force * 1000);
+            }
         }
         #endregion
 

@@ -31,7 +31,18 @@ namespace Com.sgagdr.BlackSky
     {
         public string defaultName = "defaultName";
         public InputField usernameInput;
+        public InputField roomnameField;
         public static ProfileData myProfile = new ProfileData();
+
+        public GameObject tabMain;
+        public GameObject tabRooms;
+        public GameObject tabCreate;
+
+        public GameObject buttonRoom;
+
+        private List<RoomInfo> roomList;
+
+        public byte maxPlayers = 20;
 
         public void Awake()
         {
@@ -49,6 +60,9 @@ namespace Com.sgagdr.BlackSky
         }
         public override void OnConnectedToMaster()
         {
+            Debug.Log("Connected!");
+
+            PhotonNetwork.JoinLobby();
             base.OnConnectedToMaster();
         }
 
@@ -83,7 +97,15 @@ namespace Com.sgagdr.BlackSky
 
         public void Create()
         {
-            PhotonNetwork.CreateRoom("");
+            RoomOptions options = new RoomOptions();
+            options.MaxPlayers = maxPlayers;
+
+            ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
+            properties.Add("map", 0);
+
+            options.CustomRoomProperties = properties;
+
+            PhotonNetwork.CreateRoom(roomnameField.text, options);
         }
 
         public void Connect()
@@ -105,6 +127,59 @@ namespace Com.sgagdr.BlackSky
                 Data.SaveProfile(myProfile);
                 PhotonNetwork.LoadLevel(2);
             }
+        }
+
+        public void TabCloseAll()
+        {
+            tabMain.SetActive(false);
+            tabRooms.SetActive(false);
+            tabCreate.SetActive(false);
+        }
+
+        public void TabOpenMain()
+        {
+            TabCloseAll();
+            tabMain.SetActive(true);
+        }
+        public void TabOpenRooms()
+        {
+            TabCloseAll();
+            tabRooms.SetActive(true);
+        }
+        public void TabOpenCreate()
+        {
+            TabCloseAll();
+            tabCreate.SetActive(true);
+        }
+
+        private void ClearRoomList()
+        {
+            Transform content = tabRooms.transform.Find("Scroll View/Viewport/Content");
+            foreach (Transform a in content) Destroy(a.gameObject);
+        }
+
+        public override void OnRoomListUpdate(List<RoomInfo> p_list)
+        {
+            roomList = p_list;
+            ClearRoomList();
+
+            Transform content = tabRooms.transform.Find("Scroll View/Viewport/Content");
+
+            foreach (RoomInfo a in roomList) {
+                GameObject newRoomButton = Instantiate(buttonRoom, content) as GameObject;
+                newRoomButton.transform.Find("Name").GetComponent<Text>().text = a.Name;
+                newRoomButton.transform.Find("Players").GetComponent<Text>().text = a.PlayerCount + "/" + a.MaxPlayers+"";
+
+                newRoomButton.GetComponent<Button>().onClick.AddListener(delegate { JoinRoom(newRoomButton.transform); });
+            }
+
+            base.OnRoomListUpdate(roomList);
+        }
+
+        public void JoinRoom(Transform p_button)
+        {
+            string t_roomName = p_button.transform.Find("Name").GetComponent<Text>().text;
+            PhotonNetwork.JoinRoom(t_roomName);
         }
     }
 }

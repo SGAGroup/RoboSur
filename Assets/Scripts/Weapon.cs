@@ -28,7 +28,9 @@ namespace Com.sgagdr.BlackSky
         #region Variables
         private Player player;
 
+        public int playerLayer = 10;
 
+        public GameObject hitDetector;
         public Gun[] loadout;
         private Gun currentGunData;
         //Из-за [] можно хранить несколько предметов в одном gameobject'e
@@ -67,7 +69,7 @@ namespace Com.sgagdr.BlackSky
             {
                 Gun curGun = loadout[i];
                 //if (curGun.weaponType == typeOfWeapon.Gun) 
-                    curGun.Initialize();
+                curGun.Initialize();
             }
             Equip(0);
         }
@@ -101,7 +103,7 @@ namespace Com.sgagdr.BlackSky
             {
                 isAbleToReload = (currentGunData.GetStash() > 0 && currentGunData.GetClip() < currentGunData.clipsize && currentGunData.weaponType == typeOfWeapon.Gun);
 
-                //Если нажата ЛКМ, то внутри функции Aim переменная p_isAiming будет равна истине
+                //Если нажата ПКМ, то внутри функции Aim переменная p_isAiming будет равна истине
                 Aim(Input.GetMouseButton(1));
 
 
@@ -200,7 +202,10 @@ namespace Com.sgagdr.BlackSky
             t_newWeapon.GetComponent<Sway>().isMine = photonView.IsMine;
 
             currentWeapon = t_newWeapon;
-            currentWeapon.GetComponentInChildren<VisualEffect>().visualEffectAsset = currentGunData.shotEffect;
+            if (currentGunData.shotEffect != null)
+            {
+                currentWeapon.GetComponentInChildren<VisualEffect>().visualEffectAsset = currentGunData.shotEffect;
+            }
         }
 
         void Aim(bool p_isAiming)
@@ -260,7 +265,7 @@ namespace Com.sgagdr.BlackSky
                     t_newHole.transform.LookAt(t_hit.point + t_hit.normal);
                     Destroy(t_newHole, bulletholeDuration);
 
-                    
+
                     Transform t_barell = currentWeapon.GetComponentInChildren<VisualEffect>().gameObject.transform;
                     if (!t_barell) t_barell = currentWeapon.transform;
                     GameObject t_newTrail = Instantiate(currentGunData.trail, t_barell.position, Quaternion.identity);
@@ -270,7 +275,7 @@ namespace Com.sgagdr.BlackSky
                     if (photonView.IsMine)
                     {
                         //Что-то с тем, что мы попали в игрока
-                        if (t_hit.collider.gameObject.layer == 10)
+                        if (t_hit.collider.gameObject.layer == playerLayer)
                         {
                             //А тут должен быть эффект от урона
                             //И теперь тут есть урон
@@ -284,6 +289,27 @@ namespace Com.sgagdr.BlackSky
                     }
                 }
             }
+
+            if (currentGunData.weaponType == typeOfWeapon.Melee)
+            {
+                GameObject attackedEntity = hitDetector.GetComponent<HitDetector>().whoIsTouched;
+                if (attackedEntity != null)
+                {
+                    if (photonView.IsMine)
+                    {
+                        if (attackedEntity.layer == playerLayer)
+                        {
+                            attackedEntity.GetPhotonView().RPC("TakeDamage", RpcTarget.All, loadout[currentIndex].damage, PhotonNetwork.LocalPlayer.ActorNumber);
+                            Vector3 knockBackDirection = attackedEntity.transform.position - transform.position;
+                            knockBackDirection = knockBackDirection.normalized;
+                            
+                            attackedEntity.GetPhotonView().RPC("GetForce", RpcTarget.All, knockBackDirection);
+                        }
+
+                    }
+                }
+            }
+
 
             //cooldown
             currentCooldown = loadout[currentIndex].firerate;
@@ -318,6 +344,7 @@ namespace Com.sgagdr.BlackSky
 
         private void PlayVFX(Gun curGunDat, GameObject curWeap)
         {
+            Debug.Log("Playing VFX!");
             VisualEffect vfx = currentWeapon.GetComponentInChildren<VisualEffect>();
             Animation anim = currentWeapon.GetComponentInChildren<Animation>();
 

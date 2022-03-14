@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: BattlePan
   m_EditorClassIdentifier: 
   gunName: BigBen
-  damage: 50
+  damage: 30
   prefab: {fileID: 5821635380701155427, guid: a531edea36e432548a332ed506ea6806, type: 3}
   weaponType: 1
   ammoType: -1
-  ammo: 999999
-  clipsize: 99999
-  reload: 0
+  ammo: 1
+  clipsize: 1
+  reload: 0.5
   bloom: 0
   recoil: 0
   kickback: 0
