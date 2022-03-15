@@ -33,6 +33,7 @@ namespace Com.sgagdr.BlackSky
         void Update()
         {
             if (!photonView.IsMine) return;
+            if (Pause.isPause) return;
             SetY();
             SetX();
 

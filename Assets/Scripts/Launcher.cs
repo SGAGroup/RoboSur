@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Photon.Pun;
 using UnityEngine.UI;
 using Photon.Realtime;
@@ -27,8 +28,12 @@ namespace Com.sgagdr.BlackSky
         }
     }
 
+
     public class Launcher : MonoBehaviourPunCallbacks
     {
+        public int[] arrayOfMaps = { 2 };
+        public int mapIndex = 0;
+
         public string defaultName = "defaultName";
         public InputField usernameInput;
         public InputField roomnameField;
@@ -38,6 +43,7 @@ namespace Com.sgagdr.BlackSky
         public GameObject tabRooms;
         public GameObject tabCreate;
 
+        public GameObject changeMapButton;
         public GameObject buttonRoom;
 
         private List<RoomInfo> roomList;
@@ -125,7 +131,7 @@ namespace Com.sgagdr.BlackSky
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {
                 Data.SaveProfile(myProfile);
-                PhotonNetwork.LoadLevel(2);
+                PhotonNetwork.LoadLevel(arrayOfMaps[mapIndex]);
             }
         }
 
@@ -181,5 +187,17 @@ namespace Com.sgagdr.BlackSky
             string t_roomName = p_button.transform.Find("Name").GetComponent<Text>().text;
             PhotonNetwork.JoinRoom(t_roomName);
         }
+
+        public void ChangeMap()
+        {
+            mapIndex = (mapIndex + 1) % arrayOfMaps.Length;            
+            Scene map = SceneManager.GetSceneByBuildIndex(arrayOfMaps[mapIndex]);
+            string[] path = SceneUtility.GetScenePathByBuildIndex(arrayOfMaps[mapIndex]).Split('/');
+            string mapName = path[path.Length - 1];
+            //string mapName = map.name;
+            Debug.Log($"Current index: {mapIndex}, Build number: {arrayOfMaps[mapIndex]}, Name: " + mapName);
+            changeMapButton.GetComponentInChildren<Text>().text = $"Map: {mapName}" ;
+        }
+
     }
 }

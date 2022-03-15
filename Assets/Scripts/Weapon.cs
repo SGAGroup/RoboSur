@@ -77,6 +77,7 @@ namespace Com.sgagdr.BlackSky
         void Update()
         {
             if (!photonView.IsMine) return;
+            if (Pause.isPause) return;
 
             if (Input.GetKeyDown(KeyCode.P))
             {

@@ -30,6 +30,8 @@ namespace Com.sgagdr.BlackSky
         private void Update()
         {
             if (!photonView.IsMine) return;
+            if (Pause.isPause) return;
+
             UpdateSway();
         }
 

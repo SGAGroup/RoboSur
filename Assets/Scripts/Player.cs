@@ -115,6 +115,7 @@ namespace Com.sgagdr.BlackSky
 
         private void Update()
         {
+            if (photonView.IsMine && Pause.isPause) return;
             if (!photonView.IsMine) return;
             //"Очень крутая теория почему мы проверяем кнопки здесь, а не в FixedUpdate"
 
@@ -125,11 +126,30 @@ namespace Com.sgagdr.BlackSky
             //Впитываем кнопки
             bool sprint = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
             bool jump = Input.GetKeyDown(KeyCode.Space);
+            bool pause = Input.GetKeyDown(KeyCode.Escape);
 
             //Положения (States)
             bool isGrounded = Physics.Raycast(groundDetector.position, Vector3.down, 0.1f, ground);
             bool isJumping = jump && isGrounded;
             bool isSprinting = sprint && t_vmove > 0 && !isJumping && isGrounded && !isAim;
+
+            if (pause)
+            {
+                GameObject.Find("Pause").GetComponent<Pause>().TogglePause();
+            }
+
+            if (Pause.isPause)
+            {
+                t_hmove = 0;
+                t_vmove = 0;
+                sprint = false;
+                jump = false;
+                pause = false;
+                isGrounded = false;
+                isJumping = false;
+                isSprinting = false;
+            }
+
 
             //Прыгаем
             if (isJumping)
@@ -189,6 +209,19 @@ namespace Com.sgagdr.BlackSky
             //Движение
             Vector3 t_direction = Vector3.zero;
             float t_adjustedSpeed = speed;
+
+            if (Pause.isPause)
+            {
+                t_hmove = 0;
+                t_vmove = 0;
+                sprint = false;
+                jump = false;
+                slide = false;
+                isGrounded = false;
+                isJumping = false;
+                isSprinting = false;
+                isSliding = false;
+            }
 
             if (!sliding)
             {
